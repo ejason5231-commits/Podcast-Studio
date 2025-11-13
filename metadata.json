@@ -1,0 +1,5 @@
+{
+  "name": "Podcast Studio",
+  "description": "An application to showcase Gemini's text-to-speech functionality for generating multi-speaker podcasts.",
+  "requestFramePermissions": []
+}
