@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { CloseIcon, ProfileIcon, BellIcon, SunIcon, MoonIcon, TicketIcon, PremiumIcon, CheckCircleIcon, YouTubeIcon, FacebookIcon } from './icons';
+import { CloseIcon, ProfileIcon, BellIcon, SunIcon, MoonIcon, TicketIcon, PremiumIcon, CheckCircleIcon, YouTubeIcon, FacebookIcon, TelegramIcon } from './icons';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -134,6 +134,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </a>
                 <a href="https://www.facebook.com/LearnEngwithEric" target="_blank" rel="noopener noreferrer" aria-label="Facebook Page" className="p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors">
                     <FacebookIcon className="w-7 h-7" />
+                </a>
+                <a href="https://t.me/LearnEnglishwithEric" target="_blank" rel="noopener noreferrer" aria-label="Telegram Channel" className="p-2 rounded-full bg-sky-500 text-white hover:bg-sky-600 transition-colors">
+                    <TelegramIcon className="w-7 h-7" />
                 </a>
             </div>
         </div>
