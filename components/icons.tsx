@@ -138,7 +138,6 @@ export const SaveIcon = ({ className }: { className?: string }) => (
     </svg>
 );
 
-// FIX: Corrected the type definition for the StarIcon component to be a React.FC, which correctly handles the 'key' prop.
 export const StarIcon: React.FC<{ className?: string; filled?: boolean }> = ({ className, filled = true }) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
         {filled ? (
@@ -164,5 +163,57 @@ export const FacebookIcon = ({ className }: { className?: string }) => (
 export const TelegramIcon = ({ className }: { className?: string }) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24Z" />
+    </svg>
+);
+
+export const SettingsIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
+      <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0l-.149.617a1.724 1.724 0 0 1-2.573 1.066l-.539-.539a1.724 1.724 0 0 0-2.433 1.004l-.457 1.108a1.724 1.724 0 0 0 .124 1.849l.433.693a1.724 1.724 0 0 1 0 2.137l-.433.693a1.724 1.724 0 0 0-.124 1.849l.457 1.108a1.724 1.724 0 0 0 2.433 1.004l.539-.539a1.724 1.724 0 0 1 2.573 1.066l.149.617c.38 1.56 2.6 1.56 2.98 0l.149-.617a1.724 1.724 0 0 1 2.573-1.066l.539.539a1.724 1.724 0 0 0 2.433-1.004l.457-1.108a1.724 1.724 0 0 0-.124-1.849l-.433-.693a1.724 1.724 0 0 1 0-2.137l.433.693a1.724 1.724 0 0 0 .124-1.849l-.457-1.108a1.724 1.724 0 0 0-2.433-1.004l-.539.539a1.724 1.724 0 0 1-2.573-1.066l-.149-.617ZM10 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" clipRule="evenodd" />
+    </svg>
+);
+
+export const HomeIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
+        <path fillRule="evenodd" d="M9.293 2.293a1 1 0 0 1 1.414 0l7 7A1 1 0 0 1 17 11h-1v6a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6H3a1 1 0 0 1-.707-1.707l7-7Z" clipRule="evenodd" />
+    </svg>
+);
+
+export const SoundWaveIcon = ({ className }: { className?: string }) => (
+    <svg viewBox="0 0 24 10" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+        <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style={{stopColor: '#22d3ee'}} />
+                <stop offset="100%" style={{stopColor: '#ef4444'}} />
+            </linearGradient>
+        </defs>
+        <path d="M1 5V5C1 4.44772 1.44772 4 2 4V4C2.55228 4 3 4.44772 3 5V5" stroke="url(#grad1)" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M5 6V4C5 3.44772 5.44772 3 6 3V3C6.55228 3 7 3.44772 7 4V6" stroke="url(#grad1)" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M9 8V2C9 1.44772 9.44772 1 10 1V1C10.5523 1 11 1.44772 11 2V8" stroke="url(#grad1)" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M13 7V3C13 2.44772 13.4477 2 14 2V2C14.5523 2 15 2.44772 15 3V7" stroke="url(#grad1)" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M17 5V5C17 4.44772 17.4477 4 18 4V4C18.5523 4 19 4.44772 19 5V5" stroke="url(#grad1)" strokeWidth="2" strokeLinecap="round"/>
+         <path d="M21 6V4C21 3.44772 21.4477 3 22 3V3C22.5523 3 23 3.44772 23 4V6" stroke="url(#grad1)" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+);
+
+export const AiSwirlIcon = ({ className }: { className?: string }) => (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+        <path d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 9.53613 4.14513 7.33241 5.86873 5.86873" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M12 8V12L15 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+);
+
+export const LibraryBooksIcon = ({ className }: { className?: string }) => (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H18.5A2.5 2.5 0 0 1 21 19.5V21.5H4V19.5Z" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M6.5 17V7.5A2.5 2.5 0 0 1 9 5H16.5A2.5 2.5 0 0 1 19 7.5V17" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M10 10.5C10 9.11929 11.1193 8 12.5 8C13.8807 8 15 9.11929 15 10.5V13.5C15 14.8807 13.8807 16 12.5 16H12" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M10 13.5H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M15 13.5H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+);
+
+export const ArrowLeftIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
+        <path fillRule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clipRule="evenodd" />
     </svg>
 );

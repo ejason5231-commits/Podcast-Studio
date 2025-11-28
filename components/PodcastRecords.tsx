@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { PodcastRecord } from '../App';
 import { ChevronDownIcon, StarIcon } from './icons';
@@ -59,10 +60,10 @@ const PodcastItem: React.FC<{
     isExpanded: boolean;
     onToggleExpand: (id: number) => void;
 }> = ({ record, isExpanded, onToggleExpand }) => (
-    <div className="bg-gray-900/50 rounded-lg border border-gray-700 overflow-hidden transition-all duration-300">
+    <div className="bg-white/60 dark:bg-black/20 rounded-xl overflow-hidden transition-all duration-300 shadow-lg">
         <div className="p-4">
             <div className="flex justify-between items-start gap-4">
-                <h3 className="text-lg font-semibold text-cyan-400 truncate pr-4">{record.topic}</h3>
+                <h3 className="text-lg font-semibold text-cyan-500 dark:text-cyan-400 truncate pr-4">{record.topic}</h3>
                 {'rating' in record && <Rating rating={record.rating} />}
             </div>
             <div className="mt-4">
@@ -71,17 +72,17 @@ const PodcastItem: React.FC<{
                 </audio>
             </div>
         </div>
-        <div className="border-t border-gray-700">
+        <div>
             <button
                 onClick={() => onToggleExpand(record.id)}
-                className="w-full flex justify-between items-center p-3 text-sm font-medium text-gray-300 hover:bg-gray-700/50 focus:outline-none"
+                className="w-full flex justify-between items-center p-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none"
             >
                 <span>{isExpanded ? 'Hide' : 'Show'} Script</span>
                 <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
             </button>
             {isExpanded && (
-                <div className="p-4 border-t border-gray-700 bg-gray-800/50">
-                    <pre className="whitespace-pre-wrap text-sm text-gray-300 font-sans">{record.script}</pre>
+                <div className="p-4 bg-slate-50 dark:bg-black/20">
+                    <pre className="whitespace-pre-wrap text-sm text-gray-600 dark:text-gray-300 font-sans">{record.script}</pre>
                 </div>
             )}
         </div>
@@ -101,18 +102,18 @@ const PodcastRecords: React.FC<PodcastRecordsProps> = ({ records }) => {
 
     const ViewSelector = () => (
         <div className="flex justify-center mb-6">
-            <div className="flex rounded-md shadow-sm bg-gray-900/50 border border-gray-700 p-1" role="group">
+            <div className="flex rounded-lg shadow-sm bg-slate-200/80 dark:bg-black/20 p-1" role="group">
                 <button
                     type="button"
                     onClick={() => setActiveView('featured')}
-                    className={`px-4 py-2 text-sm font-medium transition-colors rounded-md ${activeView === 'featured' ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-gray-700/50'}`}
+                    className={`px-4 py-2 text-sm font-medium transition-colors rounded-md ${activeView === 'featured' ? 'bg-cyan-600 text-white' : 'text-slate-700 dark:text-gray-300 hover:bg-slate-300/60 dark:hover:bg-white/10'}`}
                 >
                     Best Podcasts
                 </button>
                 <button
                     type="button"
                     onClick={() => setActiveView('user')}
-                    className={`px-4 py-2 text-sm font-medium transition-colors rounded-md ${activeView === 'user' ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-gray-700/50'}`}
+                    className={`px-4 py-2 text-sm font-medium transition-colors rounded-md ${activeView === 'user' ? 'bg-cyan-600 text-white' : 'text-slate-700 dark:text-gray-300 hover:bg-slate-300/60 dark:hover:bg-white/10'}`}
                 >
                     My Podcasts
                 </button>
@@ -122,11 +123,6 @@ const PodcastRecords: React.FC<PodcastRecordsProps> = ({ records }) => {
 
     return (
         <div className="space-y-6">
-            <div className="text-center">
-                <h2 className="text-2xl font-bold text-cyan-300">Podcast Library</h2>
-                <p className="text-gray-400">Browse featured podcasts or listen to your saved creations.</p>
-            </div>
-            
             <ViewSelector />
 
             <div className="space-y-4">
@@ -140,9 +136,9 @@ const PodcastRecords: React.FC<PodcastRecordsProps> = ({ records }) => {
                         />
                     )).reverse() // Show newest user podcasts first
                 ) : (
-                    <div className="text-center py-10 px-4 bg-gray-900/50 rounded-lg border border-gray-700">
-                        <p className="text-gray-500">You haven't saved any podcasts yet.</p>
-                        <p className="text-gray-500 mt-1">Go to the generator and click 'Save' to see them here.</p>
+                    <div className="text-center py-10 px-4 bg-white/60 dark:bg-black/20 rounded-xl">
+                        <p className="text-gray-500 dark:text-gray-400">You haven't saved any podcasts yet.</p>
+                        <p className="text-gray-500 dark:text-gray-400 mt-1">Go to the generator and click 'Save' to see them here.</p>
                     </div>
                 )}
             </div>

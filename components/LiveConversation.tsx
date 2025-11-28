@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, LiveSession, LiveServerMessage, Modality } from '@google/genai';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { decode, decodeAudioData, encode } from '../utils/audioUtils';
@@ -227,25 +228,24 @@ const LiveConversation: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-            <h2 className="text-2xl font-bold text-cyan-300 mb-2">Real-Time Conversation</h2>
-            <p className="text-gray-400 mb-6 max-w-md">Click the button and start speaking to have a real-time conversation with Gemini.</p>
+            <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md">Click the button and start speaking to have a real-time conversation with AI.</p>
 
             <div className="w-full max-w-md mb-6">
                 <button
                     onClick={handleToggleConversation}
                     disabled={status === 'connecting'}
-                    className={`w-full inline-flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-full shadow-lg text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-cyan-500
-                        ${status === 'connected' ? 'bg-red-600 hover:bg-red-700' : 'bg-cyan-600 hover:bg-cyan-700'}
+                    className={`w-full inline-flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-full shadow-lg text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-900 focus:ring-cyan-500 transform hover:scale-105
+                        ${status === 'connected' ? 'bg-red-600 hover:bg-red-700 shadow-red-500/30' : 'bg-cyan-600 hover:bg-cyan-700 shadow-cyan-500/30'}
                         ${status === 'connecting' ? 'bg-gray-500 cursor-not-allowed' : ''}
                     `}
                 >
                     {getButtonContent()}
                 </button>
-                {status === 'connected' && <p className="text-green-400 mt-4 animate-pulse">Listening...</p>}
-                {errorMessage && <p className="text-red-400 mt-4">{errorMessage}</p>}
+                {status === 'connected' && <p className="text-green-500 dark:text-green-400 mt-4 animate-pulse">Listening...</p>}
+                {errorMessage && <p className="text-red-500 dark:text-red-400 mt-4">{errorMessage}</p>}
             </div>
 
-            <div className="w-full max-w-lg h-80 bg-gray-900/50 rounded-lg p-4 overflow-y-auto space-y-4 border border-gray-700">
+            <div className="w-full max-w-lg h-80 bg-slate-100 dark:bg-black/20 rounded-xl p-4 overflow-y-auto space-y-4 shadow-lg border border-slate-200 dark:border-transparent">
                 {transcripts.length === 0 && (
                     <div className="flex items-center justify-center h-full text-gray-500">
                         <p>Conversation will appear here.</p>
@@ -254,10 +254,10 @@ const LiveConversation: React.FC = () => {
                 {transcripts.map((t) => (
                     <div key={t.id} className={`flex items-start gap-3 ${t.sender === 'user' ? 'justify-end' : ''}`}>
                         {t.sender === 'model' && <div className="flex-shrink-0 w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center"><BotIcon className="w-5 h-5"/></div>}
-                        <div className={`max-w-xs md:max-w-md px-4 py-2 rounded-xl ${t.sender === 'user' ? 'bg-cyan-800 text-right' : 'bg-gray-700'}`}>
+                        <div className={`max-w-xs md:max-w-md px-4 py-2 rounded-xl ${t.sender === 'user' ? 'bg-cyan-100 dark:bg-cyan-800/70 text-cyan-900 dark:text-inherit text-right' : 'bg-slate-200 dark:bg-slate-700/70'}`}>
                             <p className="text-sm">{t.text}</p>
                         </div>
-                        {t.sender === 'user' && <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center"><UserIcon className="w-5 h-5"/></div>}
+                        {t.sender === 'user' && <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center"><UserIcon className="w-5 h-5"/></div>}
                     </div>
                 ))}
             </div>
