@@ -52,50 +52,99 @@ const Rating = ({ rating }: { rating: number }) => (
     </div>
 );
 
+type DisplayRecord = PodcastRecord | (typeof featuredPodcasts)[0];
+
+const PodcastItem: React.FC<{
+    record: DisplayRecord;
+    isExpanded: boolean;
+    onToggleExpand: (id: number) => void;
+}> = ({ record, isExpanded, onToggleExpand }) => (
+    <div className="bg-gray-900/50 rounded-lg border border-gray-700 overflow-hidden transition-all duration-300">
+        <div className="p-4">
+            <div className="flex justify-between items-start gap-4">
+                <h3 className="text-lg font-semibold text-cyan-400 truncate pr-4">{record.topic}</h3>
+                {'rating' in record && <Rating rating={record.rating} />}
+            </div>
+            <div className="mt-4">
+                <audio controls src={record.audioUrl} className="w-full rounded-lg accent-cyan-500">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </div>
+        <div className="border-t border-gray-700">
+            <button
+                onClick={() => onToggleExpand(record.id)}
+                className="w-full flex justify-between items-center p-3 text-sm font-medium text-gray-300 hover:bg-gray-700/50 focus:outline-none"
+            >
+                <span>{isExpanded ? 'Hide' : 'Show'} Script</span>
+                <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+            </button>
+            {isExpanded && (
+                <div className="p-4 border-t border-gray-700 bg-gray-800/50">
+                    <pre className="whitespace-pre-wrap text-sm text-gray-300 font-sans">{record.script}</pre>
+                </div>
+            )}
+        </div>
+    </div>
+);
+
 
 const PodcastRecords: React.FC<PodcastRecordsProps> = ({ records }) => {
     const [expandedRecordId, setExpandedRecordId] = useState<number | null>(null);
+    const [activeView, setActiveView] = useState<'featured' | 'user'>('featured');
 
     const toggleExpand = (id: number) => {
         setExpandedRecordId(expandedRecordId === id ? null : id);
-    };
+        };
+
+    const podcastsToDisplay = activeView === 'featured' ? featuredPodcasts : records;
+
+    const ViewSelector = () => (
+        <div className="flex justify-center mb-6">
+            <div className="flex rounded-md shadow-sm bg-gray-900/50 border border-gray-700 p-1" role="group">
+                <button
+                    type="button"
+                    onClick={() => setActiveView('featured')}
+                    className={`px-4 py-2 text-sm font-medium transition-colors rounded-md ${activeView === 'featured' ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-gray-700/50'}`}
+                >
+                    Best Podcasts
+                </button>
+                <button
+                    type="button"
+                    onClick={() => setActiveView('user')}
+                    className={`px-4 py-2 text-sm font-medium transition-colors rounded-md ${activeView === 'user' ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-gray-700/50'}`}
+                >
+                    My Podcasts
+                </button>
+            </div>
+        </div>
+    );
 
     return (
         <div className="space-y-6">
             <div className="text-center">
                 <h2 className="text-2xl font-bold text-cyan-300">Podcast Library</h2>
-                <p className="text-gray-400">A curated collection of featured podcasts.</p>
+                <p className="text-gray-400">Browse featured podcasts or listen to your saved creations.</p>
             </div>
+            
+            <ViewSelector />
+
             <div className="space-y-4">
-                {featuredPodcasts.map(record => (
-                    <div key={record.id} className="bg-gray-900/50 rounded-lg border border-gray-700 overflow-hidden transition-all duration-300">
-                        <div className="p-4">
-                             <div className="flex justify-between items-start">
-                                <h3 className="text-lg font-semibold text-cyan-400 truncate pr-4">{record.topic}</h3>
-                                <Rating rating={record.rating} />
-                            </div>
-                            <div className="mt-4">
-                                <audio controls src={record.audioUrl} className="w-full rounded-lg accent-cyan-500">
-                                    Your browser does not support the audio element.
-                                </audio>
-                            </div>
-                        </div>
-                        <div className="border-t border-gray-700">
-                            <button
-                                onClick={() => toggleExpand(record.id)}
-                                className="w-full flex justify-between items-center p-3 text-sm font-medium text-gray-300 hover:bg-gray-700/50 focus:outline-none"
-                            >
-                                <span>{expandedRecordId === record.id ? 'Hide' : 'Show'} Script</span>
-                                <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${expandedRecordId === record.id ? 'rotate-180' : ''}`} />
-                            </button>
-                            {expandedRecordId === record.id && (
-                                <div className="p-4 border-t border-gray-700 bg-gray-800/50">
-                                    <pre className="whitespace-pre-wrap text-sm text-gray-300 font-sans">{record.script}</pre>
-                                </div>
-                            )}
-                        </div>
+                 {podcastsToDisplay.length > 0 ? (
+                    podcastsToDisplay.map(record => (
+                        <PodcastItem
+                            key={record.id}
+                            record={record}
+                            isExpanded={expandedRecordId === record.id}
+                            onToggleExpand={toggleExpand}
+                        />
+                    )).reverse() // Show newest user podcasts first
+                ) : (
+                    <div className="text-center py-10 px-4 bg-gray-900/50 rounded-lg border border-gray-700">
+                        <p className="text-gray-500">You haven't saved any podcasts yet.</p>
+                        <p className="text-gray-500 mt-1">Go to the generator and click 'Save' to see them here.</p>
                     </div>
-                ))}
+                )}
             </div>
         </div>
     );

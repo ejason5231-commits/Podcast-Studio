@@ -7,7 +7,6 @@ import { DownloadIcon, UploadIcon, PlayCircleIcon, SaveIcon } from './icons';
 
 interface Speaker {
     name: string;
-    personality: string;
     voice: string;
 }
 
@@ -33,8 +32,8 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
     const [proficiencyLevel, setProficiencyLevel] = useState<ProficiencyLevel>('B1');
     const [speakerMode, setSpeakerMode] = useState<'one' | 'two'>('two');
     const [speakers, setSpeakers] = useState<Speaker[]>([
-        { name: 'Joe', personality: 'An optimistic and curious podcast host, always excited about new technology.', voice: 'Kore' },
-        { name: 'Jane', personality: 'A calm, knowledgeable, and slightly skeptical expert in the field.', voice: 'Puck' }
+        { name: 'Joe', voice: 'Kore' },
+        { name: 'Jane', voice: 'Puck' }
     ]);
     const [script, setScript] = useState('');
     const [isLoadingScript, setIsLoadingScript] = useState(false);
@@ -67,7 +66,6 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
                 The language and vocabulary used should be suitable for a language learner at the ${proficiencyLevels[proficiencyLevel]} level.
                 The monologue should be from the perspective of the following speaker:
                 - Speaker Name: ${speakers[0].name}
-                - Speaker Personality: ${speakers[0].personality}
                 IMPORTANT: The output must ONLY be the script for the monologue. Do not include the speaker's name or any prefixes like "Script:".`
                 : `You are an expert podcast scriptwriter.
                 Write a short, engaging podcast dialogue on the topic: "${topic}". The script should be for a podcast with a total length of approximately ${duration}.
@@ -75,11 +73,9 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
         
                 The dialogue must be between the following two speakers:
                 - Speaker 1 Name: ${speakers[0].name}
-                - Speaker 1 Personality: ${speakers[0].personality}
                 - Speaker 2 Name: ${speakers[1].name}
-                - Speaker 2 Personality: ${speakers[1].personality}
         
-                The script should be natural, reflect the speakers' distinct personalities, and stay on topic.
+                The script should be a natural conversation and stay on topic.
                 IMPORTANT: The output must ONLY be the dialogue script, with each line starting with the speaker's name followed by a colon. For example:
                 ${speakers[0].name}: Hello, and welcome to the show.
                 ${speakers[1].name}: It's great to be here.
@@ -330,20 +326,12 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
                     <div className={`grid ${speakerMode === 'two' ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'} gap-4 pt-4`}>
                         <div className={`${speakerMode === 'one' ? 'max-w-sm mx-auto w-full' : ''}`}>
                              <div className="space-y-2">
-                                <label htmlFor="speaker-name-0" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{speakerMode === 'one' ? 'Speaker Name' : 'Name 1'}</label>
+                                <label htmlFor="speaker-name-0" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{speakerMode === 'one' ? 'Speaker Name' : 'Speaker 1'}</label>
                                 <input
                                     id="speaker-name-0"
                                     type="text"
                                     value={speakers[0].name}
                                     onChange={(e) => handleSpeakerChange(0, 'name', e.target.value)}
-                                    className="w-full p-2 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500"
-                                />
-                                <label htmlFor="speaker-personality-0" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Personality</label>
-                                <textarea
-                                    id="speaker-personality-0"
-                                    value={speakers[0].personality}
-                                    onChange={(e) => handleSpeakerChange(0, 'personality', e.target.value)}
-                                    rows={3}
                                     className="w-full p-2 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500"
                                 />
                                 <label htmlFor="speaker-voice-0" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Voice</label>
@@ -367,20 +355,12 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
 
                         {speakerMode === 'two' && (
                              <div className="space-y-2">
-                                <label htmlFor="speaker-name-1" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name 2</label>
+                                <label htmlFor="speaker-name-1" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Speaker 2</label>
                                 <input
                                     id="speaker-name-1"
                                     type="text"
                                     value={speakers[1].name}
                                     onChange={(e) => handleSpeakerChange(1, 'name', e.target.value)}
-                                    className="w-full p-2 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500"
-                                />
-                                <label htmlFor="speaker-personality-1" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Personality</label>
-                                <textarea
-                                    id="speaker-personality-1"
-                                    value={speakers[1].personality}
-                                    onChange={(e) => handleSpeakerChange(1, 'personality', e.target.value)}
-                                    rows={3}
                                     className="w-full p-2 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-cyan-500"
                                 />
                                 <label htmlFor="speaker-voice-1" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Voice</label>
@@ -474,15 +454,15 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
                                 <p className="text-green-600 dark:text-green-400 text-center pt-2">Podcast saved to your records!</p>
                                 : <p className="text-cyan-600 dark:text-cyan-400 text-center pt-2">Audio generated successfully!</p>
                             }
-                            <div className="mt-4 w-full flex flex-col sm:flex-row items-center gap-4">
-                                <audio controls src={audioUrl} className="w-full flex-grow rounded-lg accent-cyan-500">
+                            <div className="mt-4 w-full flex flex-col items-center gap-4">
+                                <audio controls src={audioUrl} className="w-full rounded-lg accent-cyan-500">
                                     Your browser does not support the audio element.
                                 </audio>
-                                <div className="w-full sm:w-auto flex-shrink-0 flex flex-row sm:flex-col gap-2">
+                                <div className="w-full max-w-xs flex flex-col gap-2">
                                     <button
                                         onClick={handleSaveToRecords}
                                         disabled={isSaved}
-                                        className="w-full sm:w-auto flex-shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-cyan-500 disabled:bg-gray-400 dark:disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors"
+                                        className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-cyan-500 disabled:bg-gray-400 dark:disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors"
                                     >
                                         <SaveIcon className="w-5 h-5" />
                                         {isSaved ? 'Saved' : 'Save'}
@@ -490,7 +470,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
                                     <a
                                         href={audioUrl}
                                         download="podcast.wav"
-                                        className="w-full sm:w-auto flex-shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-green-500 transition-colors"
+                                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-green-500 transition-colors"
                                     >
                                         <DownloadIcon className="w-5 h-5" />
                                         Download

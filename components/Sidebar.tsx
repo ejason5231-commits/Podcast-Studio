@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { CloseIcon, ProfileIcon, BellIcon, SunIcon, TicketIcon, PremiumIcon, CheckCircleIcon } from './icons';
+import { CloseIcon, ProfileIcon, BellIcon, SunIcon, MoonIcon, TicketIcon, PremiumIcon, CheckCircleIcon, YouTubeIcon, FacebookIcon } from './icons';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -86,7 +87,11 @@ const Sidebar: React.FC<SidebarProps> = ({
           {/* Theme */}
           <div className="flex items-center justify-between p-2 rounded-md">
             <div className="flex items-center space-x-3">
-              <SunIcon className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
+              {theme === 'dark' ? (
+                <MoonIcon className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
+              ) : (
+                <SunIcon className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
+              )}
               <span>Theme</span>
             </div>
             <button
@@ -116,6 +121,22 @@ const Sidebar: React.FC<SidebarProps> = ({
             </button>
           )}
         </nav>
+        <div className="absolute bottom-0 left-0 w-full p-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="text-center mb-3">
+                <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">About</h4>
+                <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
+                    Created by English with Eric
+                </p>
+            </div>
+            <div className="flex justify-center space-x-4">
+                <a href="https://www.youtube.com/@LearnEngwithEric" target="_blank" rel="noopener noreferrer" aria-label="YouTube Channel" className="p-2 rounded-full bg-red-600 text-white hover:bg-red-700 transition-colors">
+                    <YouTubeIcon className="w-7 h-7" />
+                </a>
+                <a href="https://www.facebook.com/LearnEngwithEric" target="_blank" rel="noopener noreferrer" aria-label="Facebook Page" className="p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+                    <FacebookIcon className="w-7 h-7" />
+                </a>
+            </div>
+        </div>
       </aside>
       
       {isPremiumModalOpen && (
