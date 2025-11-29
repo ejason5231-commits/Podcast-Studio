@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, LiveSession, LiveServerMessage, Modality } from '@google/genai';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { decode, decodeAudioData, encode } from '../utils/audioUtils';
@@ -16,6 +15,10 @@ const LiveConversation: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [textInput, setTextInput] = useState('');
 
+    // Ad State
+    const [isAdVisible, setIsAdVisible] = useState(false);
+    const [adCountdown, setAdCountdown] = useState(5);
+
     const sessionPromiseRef = useRef<Promise<LiveSession> | null>(null);
     const inputAudioContextRef = useRef<AudioContext | null>(null);
     const outputAudioContextRef = useRef<AudioContext | null>(null);
@@ -29,10 +32,52 @@ const LiveConversation: React.FC = () => {
 
     const currentInputTranscriptionRef = useRef('');
     const currentOutputTranscriptionRef = useRef('');
+    
+    // Ad Timer Refs
+    const adTimerRef = useRef<any>(null);
+    const adCountdownTimerRef = useRef<any>(null);
+
+    const clearAdTimers = useCallback(() => {
+        if (adTimerRef.current) {
+            clearInterval(adTimerRef.current);
+            adTimerRef.current = null;
+        }
+        if (adCountdownTimerRef.current) {
+            clearInterval(adCountdownTimerRef.current);
+            adCountdownTimerRef.current = null;
+        }
+    }, []);
+
+    const showAd = useCallback(() => {
+        setIsAdVisible(true);
+        setAdCountdown(5);
+        if (adCountdownTimerRef.current) clearInterval(adCountdownTimerRef.current);
+        adCountdownTimerRef.current = setInterval(() => {
+            setAdCountdown(prev => {
+                if (prev <= 1) {
+                    clearInterval(adCountdownTimerRef.current!);
+                    adCountdownTimerRef.current = null;
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+    }, []);
+
+    const handleCloseAd = () => {
+        setIsAdVisible(false);
+        if (adCountdownTimerRef.current) {
+            clearInterval(adCountdownTimerRef.current);
+            adCountdownTimerRef.current = null;
+        }
+    };
 
     const stopConversation = useCallback(async () => {
         setStatus('idle');
         pendingMessagesRef.current = [];
+
+        clearAdTimers();
+        setIsAdVisible(false);
 
         if (sessionPromiseRef.current) {
             try {
@@ -70,7 +115,7 @@ const LiveConversation: React.FC = () => {
             await outputAudioContextRef.current.close();
             outputAudioContextRef.current = null;
         }
-    }, []);
+    }, [clearAdTimers]);
     
     useEffect(() => {
         return () => {
@@ -91,9 +136,6 @@ const LiveConversation: React.FC = () => {
         currentInputTranscriptionRef.current = '';
         currentOutputTranscriptionRef.current = '';
         
-        // If we have pending messages, we don't clear transcripts, or we init with them.
-        // We actually just want to keep the UI in sync. The pending messages were added to UI in handleSendText.
-        // If there are NO pending messages, it means it's a fresh start button click, so clear.
         if (pendingMessagesRef.current.length === 0) {
             setTranscripts([]);
         }
@@ -102,9 +144,7 @@ const LiveConversation: React.FC = () => {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             mediaStreamRef.current = stream;
 
-            // FIX: Add `as any` to window to allow access to vendor-prefixed webkitAudioContext for broader browser compatibility.
             inputAudioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
-            // FIX: Add `as any` to window to allow access to vendor-prefixed webkitAudioContext for broader browser compatibility.
             outputAudioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
             nextStartTimeRef.current = 0;
             
@@ -149,12 +189,10 @@ const LiveConversation: React.FC = () => {
                         scriptProcessorRef.current.connect(inputAudioContextRef.current.destination);
                         setStatus('connected');
 
-                        // Send any pending text messages
-                        // Note: Gemini Live API currently doesn't support sending text via session.send directly like this
-                        // This logic was removed to prevent crashes, but we keep the connection logic intact.
-                        // Pending text messages are displayed in UI but not sent to model.
-                        // To fix this fully, we would need to use a different modality or API if text input is required.
-                        // For now, we clear the pending queue as we've established connection.
+                        // Start ad timer
+                        clearAdTimers();
+                        adTimerRef.current = setInterval(showAd, 60000); // 60 seconds
+
                         pendingMessagesRef.current = [];
                     },
                     onmessage: async (message: LiveServerMessage) => {
@@ -171,8 +209,8 @@ const LiveConversation: React.FC = () => {
                             
                             setTranscripts(prev => [
                                 ...prev,
-                                ...(userInput ? [{ id: Date.now(), sender: 'user', text: userInput }] : []),
-                                ...(modelOutput ? [{ id: Date.now() + 1, sender: 'model', text: modelOutput }] : []),
+                                ...(userInput ? [{ id: Date.now(), sender: 'user' as const, text: userInput }] : []),
+                                ...(modelOutput ? [{ id: Date.now() + 1, sender: 'model' as const, text: modelOutput }] : []),
                             ]);
 
                             currentInputTranscriptionRef.current = '';
@@ -246,13 +284,9 @@ const LiveConversation: React.FC = () => {
         if (!textToSend) return;
 
         setTextInput('');
-        // Add to transcript locally
         setTranscripts(prev => [...prev, { id: Date.now(), sender: 'user', text: textToSend }]);
 
-        // We are NOT sending to the model because session.send causes crash with current API wrapper version
-        // Logic kept for UI consistency but disabled backend send
         if (status !== 'connected' && status !== 'connecting') {
-             // Queue message and start connection if not already connecting
             pendingMessagesRef.current.push(textToSend);
             startConversation();
         }
@@ -285,7 +319,7 @@ const LiveConversation: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-between h-[calc(100vh-200px)] min-h-[500px] text-center w-full">
+        <div className="flex flex-col items-center justify-between h-[calc(100vh-200px)] min-h-[500px] text-center w-full relative">
             <p className="text-gray-500 dark:text-gray-400 mb-4 max-w-md flex-shrink-0">Click the button and start speaking to have a real-time conversation with AI.</p>
             
             <div 
@@ -352,6 +386,25 @@ const LiveConversation: React.FC = () => {
                     </button>
                 </div>
             </div>
+
+            {isAdVisible && (
+                <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-[100] backdrop-blur-sm rounded-xl">
+                    <div className="bg-slate-800 p-6 rounded-lg shadow-xl text-white text-center w-full max-w-sm m-4">
+                        <h3 className="text-xl font-bold mb-4">Advertisement</h3>
+                        <p className="text-gray-300 mb-6">This ad supports the app. Thank you!</p>
+                        <div className="w-full bg-slate-700 rounded-full h-2.5 mb-4 overflow-hidden">
+                            <div className="bg-cyan-500 h-2.5 rounded-full transition-all duration-1000 ease-linear" style={{ width: `${(5 - adCountdown) / 5 * 100}%` }}></div>
+                        </div>
+                        <button
+                            onClick={handleCloseAd}
+                            disabled={adCountdown > 0}
+                            className="px-6 py-2 bg-cyan-600 text-white rounded-full hover:bg-cyan-700 disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors"
+                        >
+                            {adCountdown > 0 ? `Close in ${adCountdown}` : 'Close Ad'}
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
