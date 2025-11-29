@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { MicIcon, AiSwirlIcon, LibraryBooksIcon, SoundWaveIcon, SettingsIcon } from './icons';
+import { MicIcon, AiSwirlIcon, LibraryBooksIcon, RadarWaveIcon, MenuIcon } from './icons';
 
 interface DashboardProps {
     setActiveTab: (tab: 'generator' | 'records' | 'live') => void;
@@ -8,103 +9,102 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, onOpenSettings }) => {
     return (
-        <div className="min-h-screen w-full flex flex-col items-center px-4 py-8 bg-gradient-to-b from-[#0a0c17] to-black text-white font-sans relative overflow-hidden">
-            {/* Header */}
-            <header className="w-full flex items-center justify-center space-x-3 pt-4 z-10 relative">
-                <div className="text-center">
-                    <h1 className="text-4xl font-bold tracking-widest font-display">PODCAST</h1>
-                    <h2 className="text-2xl font-bold tracking-wider font-display text-gray-400 -mt-2">STUDIO</h2>
-                </div>
-                <SoundWaveIcon className="w-8 h-8" />
-                 <button 
+        <div className="min-h-screen w-full flex flex-col items-center bg-slate-50 dark:bg-gradient-to-b dark:from-[#0a0c17] dark:to-black text-slate-900 dark:text-white font-sans relative overflow-hidden transition-colors duration-300">
+            {/* Header / Taskbar - Fixed at top */}
+            <header className="fixed top-0 left-0 right-0 h-20 flex items-center justify-between bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-300 dark:border-white/10 shadow-sm dark:shadow-none z-50 px-4">
+                {/* Settings Button - Right Top Corner */}
+                <button 
                     onClick={onOpenSettings}
-                    className="absolute top-1/2 right-0 -translate-y-1/2 text-gray-400 hover:text-white transition-colors z-20 p-2"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full text-slate-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white transition-all focus:outline-none"
                     aria-label="Open settings"
                 >
-                    <SettingsIcon className="w-7 h-7" />
+                    <MenuIcon className="w-8 h-8" />
                 </button>
+
+                {/* Centered Brand */}
+                <div className="flex items-center justify-center w-full select-none pointer-events-none gap-3">
+                    <RadarWaveIcon className="w-12 h-12" />
+                    <div className="text-center flex flex-col items-start justify-center animate-pulse">
+                        <h1 className="text-3xl font-bold tracking-[0.2em] font-display text-slate-900 dark:text-white leading-none">PODCAST</h1>
+                        <h2 className="text-xl font-bold tracking-[0.15em] font-display text-slate-500 dark:text-gray-400 leading-none mt-1">STUDIO</h2>
+                    </div>
+                </div>
             </header>
 
-            {/* Main content centered */}
-            <main className="flex-1 flex flex-col items-center justify-center w-full">
+            {/* Main content centered with padding for fixed header */}
+            <main className="flex-1 flex flex-col items-center justify-center w-full px-4 py-8 pt-24">
                 {/* Landscape Layout (wider screens) */}
-                <div className="hidden sm:flex flex-row items-center justify-center gap-8">
+                <div className="hidden sm:flex flex-row items-center justify-center gap-6">
                      {/* Generate Button */}
-                    <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-blue-500/80 via-purple-500/80 to-transparent">
+                    <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-blue-500/80 via-purple-500/80 to-transparent shadow-lg dark:shadow-none transition-transform hover:scale-105">
                         <button 
                             onClick={() => setActiveTab('generator')} 
-                            className="w-40 h-32 bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center transition-transform hover:scale-105"
+                            className="w-48 h-24 bg-indigo-100 dark:bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center text-indigo-900 dark:text-white overflow-hidden group"
                         >
-                            <AiSwirlIcon className="w-8 h-8 mb-1" />
-                            <span className="text-[10px] font-semibold tracking-wider">GENERATE<br/>PODCAST</span>
+                            <AiSwirlIcon className="w-8 h-8 mb-1 text-indigo-700 dark:text-white group-hover:scale-110 transition-transform" />
+                            <span className="text-sm font-semibold tracking-wider">GENERATE<br/>PODCAST</span>
                         </button>
                     </div>
 
                     {/* Center Element */}
-                    <div className="relative flex items-center justify-center w-52 h-52">
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400/50 to-amber-400/50 blur-xl"></div>
-                        <div className="absolute inset-0.5 rounded-full" style={{ background: 'conic-gradient(from 180deg, #fbbf24, #22d3ee)' }}></div>
-                        <div className="absolute inset-2 rounded-full bg-[#0a0c17]"></div>
-
-                        <button 
-                            onClick={() => setActiveTab('live')} 
-                            className="relative w-[190px] h-[190px] rounded-full bg-black/30 backdrop-blur-sm flex flex-col items-center justify-center text-center transition-transform hover:scale-105"
-                        >
-                            <MicIcon className="w-12 h-12 mb-2" />
-                            <span className="text-xs font-bold tracking-widest leading-tight">LIVE<br/>CONVERSATION</span>
-                        </button>
+                    <div className="relative flex items-center justify-center w-52 h-52 transition-transform hover:scale-105 cursor-pointer" onClick={() => setActiveTab('live')}>
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500/50 to-rose-500/50 blur-xl opacity-50 dark:opacity-100 animate-pulse"></div>
+                        <div className="absolute inset-0.5 rounded-full" style={{ background: 'conic-gradient(from 0deg, #e11d48 50%, #4f46e5 50%)' }}></div>
+                        <div className="absolute inset-2 rounded-full bg-purple-100 dark:bg-[#0a0c17] flex items-center justify-center">
+                             <button className="relative w-full h-full rounded-full flex flex-col items-center justify-center text-center text-purple-900 dark:text-white">
+                                <MicIcon className="w-12 h-12 mb-2 text-purple-700 dark:text-white drop-shadow-lg" />
+                                <span className="text-base font-bold tracking-widest leading-tight">LIVE<br/>CONVERSATION</span>
+                            </button>
+                        </div>
                     </div>
 
                      {/* Library Button */}
-                     <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-red-500/80 via-purple-500/80 to-transparent">
+                     <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-red-500/80 via-purple-500/80 to-transparent shadow-lg dark:shadow-none transition-transform hover:scale-105">
                         <button 
                             onClick={() => setActiveTab('records')} 
-                            className="w-40 h-32 bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center transition-transform hover:scale-105"
+                            className="w-48 h-24 bg-rose-100 dark:bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center text-rose-900 dark:text-white overflow-hidden group"
                         >
-                            <LibraryBooksIcon className="w-8 h-8 mb-1" />
-                            <span className="text-[10px] font-semibold tracking-wider">PODCAST<br/>LIBRARY</span>
+                            <LibraryBooksIcon className="w-8 h-8 mb-1 text-rose-700 dark:text-white group-hover:scale-110 transition-transform" />
+                            <span className="text-sm font-semibold tracking-wider">PODCAST<br/>LIBRARY</span>
                         </button>
                     </div>
                 </div>
 
 
                 {/* Portrait Layout (default) */}
-                <div className="flex sm:hidden flex-col items-center justify-center">
+                <div className="flex sm:hidden flex-col items-center justify-center gap-8">
                     {/* Center Element */}
-                    <div className="relative flex items-center justify-center w-52 h-52">
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400/50 to-amber-400/50 blur-xl"></div>
-                        <div className="absolute inset-0.5 rounded-full" style={{ background: 'conic-gradient(from 180deg, #fbbf24, #22d3ee)' }}></div>
-                        <div className="absolute inset-2 rounded-full bg-[#0a0c17]"></div>
-
-                        <button 
-                            onClick={() => setActiveTab('live')} 
-                            className="relative w-[190px] h-[190px] rounded-full bg-black/30 backdrop-blur-sm flex flex-col items-center justify-center text-center transition-transform hover:scale-105"
-                        >
-                            <MicIcon className="w-12 h-12 mb-2" />
-                            <span className="text-xs font-bold tracking-widest leading-tight">LIVE<br/>CONVERSATION</span>
-                        </button>
+                     <div className="relative flex items-center justify-center w-52 h-52 transition-transform hover:scale-105 cursor-pointer" onClick={() => setActiveTab('live')}>
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500/50 to-rose-500/50 blur-xl opacity-50 dark:opacity-100 animate-pulse"></div>
+                        <div className="absolute inset-0.5 rounded-full" style={{ background: 'conic-gradient(from 0deg, #e11d48 50%, #4f46e5 50%)' }}></div>
+                        <div className="absolute inset-2 rounded-full bg-purple-100 dark:bg-[#0a0c17] flex items-center justify-center">
+                            <button className="relative w-full h-full rounded-full flex flex-col items-center justify-center text-center text-purple-900 dark:text-white">
+                                <MicIcon className="w-12 h-12 mb-2 text-purple-700 dark:text-white drop-shadow-lg" />
+                                <span className="text-base font-bold tracking-widest leading-tight">LIVE<br/>CONVERSATION</span>
+                            </button>
+                        </div>
                     </div>
 
                     {/* Lower Section */}
-                    <div className="w-full max-w-md flex items-center justify-center gap-4 z-10 mt-8">
+                    <div className="w-full max-w-md flex items-center justify-center gap-4 z-10">
                         {/* Generate Button */}
-                        <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-blue-500/80 via-purple-500/80 to-transparent flex-1">
+                        <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-blue-500/80 via-purple-500/80 to-transparent w-40 shadow-lg dark:shadow-none transition-transform hover:scale-105">
                             <button 
                                 onClick={() => setActiveTab('generator')} 
-                                className="w-full h-24 bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center transition-transform hover:scale-105"
+                                className="w-full h-24 bg-indigo-100 dark:bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center text-indigo-900 dark:text-white overflow-hidden group"
                             >
-                                <AiSwirlIcon className="w-8 h-8 mb-1" />
-                                <span className="text-[10px] font-semibold tracking-wider">GENERATE<br/>PODCAST</span>
+                                <AiSwirlIcon className="w-7 h-7 mb-1 text-indigo-700 dark:text-white group-hover:scale-110 transition-transform" />
+                                <span className="text-sm font-semibold tracking-wider">GENERATE<br/>PODCAST</span>
                             </button>
                         </div>
                         {/* Library Button */}
-                        <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-red-500/80 via-purple-500/80 to-transparent flex-1">
+                        <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-red-500/80 via-purple-500/80 to-transparent w-40 shadow-lg dark:shadow-none transition-transform hover:scale-105">
                             <button 
                                 onClick={() => setActiveTab('records')} 
-                                className="w-full h-24 bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center transition-transform hover:scale-105"
+                                className="w-full h-24 bg-rose-100 dark:bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center text-rose-900 dark:text-white overflow-hidden group"
                             >
-                                <LibraryBooksIcon className="w-8 h-8 mb-1" />
-                                <span className="text-[10px] font-semibold tracking-wider">PODCAST<br/>LIBRARY</span>
+                                <LibraryBooksIcon className="w-7 h-7 mb-1 text-rose-700 dark:text-white group-hover:scale-110 transition-transform" />
+                                <span className="text-sm font-semibold tracking-wider">PODCAST<br/>LIBRARY</span>
                             </button>
                         </div>
                     </div>

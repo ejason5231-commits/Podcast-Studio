@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export const PodcastIcon = ({ className }: { className?: string }) => (
@@ -44,6 +43,32 @@ export const MicIcon = ({ className }: { className?: string }) => (
         <path d="M5.5 8.5a.5.5 0 0 1 .5.5v1.5a4 4 0 0 0 7 0V9a.5.5 0 0 1 1 0v1.5a5 5 0 0 1-4.5 4.975V17h2a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1h2v-1.525A5 5 0 0 1 4.5 10.5V9a.5.5 0 0 1 .5-.5Z" />
     </svg>
 );
+
+export const MicIcon3D = ({ className }: { className?: string }) => (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+        <defs>
+            <radialGradient id="micGradient" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(12 8) rotate(90) scale(6)">
+                <stop offset="0%" stopColor="#67e8f9" />
+                <stop offset="100%" stopColor="#06b6d4" />
+            </radialGradient>
+             <filter id="micShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+                <feOffset dx="1" dy="2" result="offsetblur"/>
+                <feComponentTransfer>
+                    <feFuncA type="linear" slope="0.3"/>
+                </feComponentTransfer>
+                <feMerge>
+                    <feMergeNode/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+        </defs>
+        <rect x="8" y="2" width="8" height="12" rx="4" fill="url(#micGradient)" filter="url(#micShadow)"/>
+        <path d="M12 2C9.79 2 8 3.79 8 6V10C8 12.21 9.79 14 12 14C14.21 14 16 12.21 16 10V6C16 3.79 14.21 2 12 2ZM5 10V11C5 14.87 8.13 18 12 18C15.87 18 19 14.87 19 11V10" stroke="#e2e8f0" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M12 18V22M8 22H16" stroke="#e2e8f0" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+);
+
 
 export const UserIcon = ({ className }: { className?: string }) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
@@ -167,14 +192,28 @@ export const TelegramIcon = ({ className }: { className?: string }) => (
 );
 
 export const SettingsIcon = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
-      <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0l-.149.617a1.724 1.724 0 0 1-2.573 1.066l-.539-.539a1.724 1.724 0 0 0-2.433 1.004l-.457 1.108a1.724 1.724 0 0 0 .124 1.849l.433.693a1.724 1.724 0 0 1 0 2.137l-.433.693a1.724 1.724 0 0 0-.124 1.849l.457 1.108a1.724 1.724 0 0 0 2.433 1.004l.539-.539a1.724 1.724 0 0 1 2.573 1.066l.149.617c.38 1.56 2.6 1.56 2.98 0l.149-.617a1.724 1.724 0 0 1 2.573-1.066l.539.539a1.724 1.724 0 0 0 2.433-1.004l.457-1.108a1.724 1.724 0 0 0-.124-1.849l-.433-.693a1.724 1.724 0 0 1 0-2.137l.433.693a1.724 1.724 0 0 0 .124-1.849l-.457-1.108a1.724 1.724 0 0 0-2.433-1.004l-.539.539a1.724 1.724 0 0 1-2.573-1.066l-.149-.617ZM10 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" clipRule="evenodd" />
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path fillRule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567l-.091.549a.798.798 0 0 1-.517.608 7.45 7.45 0 0 0-.478.198.798.798 0 0 1-.796-.064l-.453-.324a1.875 1.875 0 0 0-2.416.2l-.043.044a1.875 1.875 0 0 0-.2 2.416l.324.453a.798.798 0 0 1 .064.796 7.448 7.448 0 0 0-.198.478.798.798 0 0 1-.608.517l-.55.092a1.875 1.875 0 0 0-1.566 1.849v.044c0 .917.663 1.699 1.567 1.85l.549.091c.281.047.508.25.608.517.06.162.127.321.198.478a.798.798 0 0 1-.064.796l-.324.453a1.875 1.875 0 0 0 .2 2.416l.044.043a1.875 1.875 0 0 0 2.416.2l.453-.324a.798.798 0 0 1 .796-.064c.157.071.316.137.478.198.267.1.47.327.517.608l.092.55c.15.903.932 1.566 1.849 1.566h.044c.917 0 1.699-.663 1.85-1.567l.091-.549a.798.798 0 0 1 .517-.608 7.52 7.52 0 0 0 .478-.198.798.798 0 0 1 .796.064l.453.324a1.875 1.875 0 0 0 2.416-.2l.043-.044a1.875 1.875 0 0 0 .2-2.416l-.324-.453a.798.798 0 0 1-.064-.796c.071-.157.137-.316.198-.478.1-.267.327-.47.608-.517l.55-.092a1.875 1.875 0 0 0 1.566-1.849v-.044c0-.917-.663-1.699-1.567-1.85l-.549-.091a.798.798 0 0 1-.608-.517 7.507 7.507 0 0 0-.198-.478.798.798 0 0 1 .064-.796l.324-.453a1.875 1.875 0 0 0-.2-2.416l-.044-.043a1.875 1.875 0 0 0-2.416-.2l-.453.324a.798.798 0 0 1-.796.064 7.462 7.462 0 0 0-.478-.198.798.798 0 0 1-.517-.608l-.092-.55a1.875 1.875 0 0 0-1.849-1.566h-.044ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clipRule="evenodd" />
     </svg>
 );
 
 export const HomeIcon = ({ className }: { className?: string }) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
         <path fillRule="evenodd" d="M9.293 2.293a1 1 0 0 1 1.414 0l7 7A1 1 0 0 1 17 11h-1v6a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6H3a1 1 0 0 1-.707-1.707l7-7Z" clipRule="evenodd" />
+    </svg>
+);
+
+export const RadarWaveIcon = ({ className }: { className?: string }) => (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+         <defs>
+            <linearGradient id="radar_grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style={{stopColor: '#22d3ee'}} />
+                <stop offset="100%" style={{stopColor: '#ef4444'}} />
+            </linearGradient>
+        </defs>
+        <path d="M12 2C6.48 2 2 6.48 2 12M22 12C22 6.48 17.52 2 12 2" stroke="url(#radar_grad)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M12 6C8.69 6 6 8.69 6 12M18 12C18 8.69 15.31 6 12 6" stroke="url(#radar_grad)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.6"/>
+        <path d="M12 10C10.9 10 10 10.9 10 12M14 12C14 10.9 13.1 10 12 10" stroke="url(#radar_grad)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.3"/>
     </svg>
 );
 
@@ -215,5 +254,23 @@ export const LibraryBooksIcon = ({ className }: { className?: string }) => (
 export const ArrowLeftIcon = ({ className }: { className?: string }) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
         <path fillRule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clipRule="evenodd" />
+    </svg>
+);
+
+export const GoogleIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+        <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .533 5.333.533 12S5.867 24 12.48 24c3.44 0 6.013-1.133 8.053-3.24 2.08-2.08 2.72-5.013 2.72-7.48 0-.52-.053-1.04-.147-1.52h-10.62z" />
+    </svg>
+);
+
+export const SendIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+        <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+    </svg>
+);
+
+export const RefreshIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className}>
+        <path fillRule="evenodd" d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39Zm1.23-3.723a.75.75 0 0 0 .219-.53V2.929a.75.75 0 0 0-1.5 0V5.36l-.31-.31A7 7 0 0 0 3.239 8.188a.75.75 0 1 0 1.448.389A5.5 5.5 0 0 1 13.89 6.11l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .53-.219Z" clipRule="evenodd" />
     </svg>
 );
