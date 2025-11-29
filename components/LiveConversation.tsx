@@ -1,7 +1,8 @@
+
 import { GoogleGenAI, LiveSession, LiveServerMessage, Modality } from '@google/genai';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { decode, decodeAudioData, encode } from '../utils/audioUtils';
-import { MicIcon, UserIcon, BotIcon, StopIcon, SendIcon, RefreshIcon } from './icons';
+import { MicIcon, UserIcon, BotIcon, StopIcon, SendIcon, RefreshIcon, PauseIcon, PlayIcon } from './icons';
 
 interface Transcript {
     id: number;
@@ -14,6 +15,7 @@ const LiveConversation: React.FC = () => {
     const [transcripts, setTranscripts] = useState<Transcript[]>([]);
     const [errorMessage, setErrorMessage] = useState('');
     const [textInput, setTextInput] = useState('');
+    const [isPaused, setIsPaused] = useState(false);
 
     // Ad State
     const [isAdVisible, setIsAdVisible] = useState(false);
@@ -75,6 +77,7 @@ const LiveConversation: React.FC = () => {
     const stopConversation = useCallback(async () => {
         setStatus('idle');
         pendingMessagesRef.current = [];
+        setIsPaused(false);
 
         clearAdTimers();
         setIsAdVisible(false);
@@ -135,6 +138,7 @@ const LiveConversation: React.FC = () => {
         setErrorMessage('');
         currentInputTranscriptionRef.current = '';
         currentOutputTranscriptionRef.current = '';
+        setIsPaused(false);
         
         if (pendingMessagesRef.current.length === 0) {
             setTranscripts([]);
@@ -299,32 +303,25 @@ const LiveConversation: React.FC = () => {
         }
     };
 
-    const getButtonContent = () => {
-        switch (status) {
-            case 'connecting':
-                return (
-                    <>
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Connecting...
-                    </>
-                );
-            case 'connected':
-                return <><StopIcon className="w-6 h-6 mr-2" /> Stop Conversation</>;
-            default:
-                return <><MicIcon className="w-6 h-6 mr-2" /> Start Conversation</>;
+    const handlePause = () => {
+        if (mediaStreamRef.current) {
+            const audioTracks = mediaStreamRef.current.getAudioTracks();
+            audioTracks.forEach(track => {
+                track.enabled = isPaused; // Toggle enabled state
+            });
+            setIsPaused(!isPaused);
         }
     };
 
     return (
-        <div className="flex flex-col items-center justify-between h-[calc(100vh-200px)] min-h-[500px] text-center w-full relative">
-            <p className="text-gray-500 dark:text-gray-400 mb-4 max-w-md flex-shrink-0">Click the button and start speaking to have a real-time conversation with AI.</p>
+        <div className="flex flex-col h-full w-full relative">
+            <div className="flex-shrink-0 pt-4 px-4 pb-2 bg-slate-100 dark:bg-black/20">
+                <p className="text-gray-500 dark:text-gray-400 text-center text-sm">Start speaking to have a real-time conversation with AI.</p>
+            </div>
             
             <div 
                 ref={scrollRef}
-                className="flex-1 w-full max-w-lg bg-slate-100 dark:bg-black/20 rounded-xl p-4 overflow-y-auto space-y-4 shadow-lg border border-slate-200 dark:border-transparent mb-4"
+                className="flex-1 w-full bg-slate-100 dark:bg-black/20 p-4 overflow-y-auto space-y-4 shadow-inner border-t border-slate-200 dark:border-white/5"
             >
                 {transcripts.length === 0 && (
                     <div className="flex items-center justify-center h-full text-gray-500">
@@ -342,48 +339,79 @@ const LiveConversation: React.FC = () => {
                 ))}
             </div>
 
-            <div className="w-full max-w-lg flex flex-col gap-4 flex-shrink-0">
-                {errorMessage && <p className="text-red-500 dark:text-red-400">{errorMessage}</p>}
-                
-                {status === 'connected' && <p className="text-green-500 dark:text-green-400 text-sm animate-pulse">Listening...</p>}
-
-                <div className="flex gap-3 w-full">
-                    <button
-                        onClick={handleToggleConversation}
-                        disabled={status === 'connecting'}
-                        className={`flex-1 inline-flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-full shadow-lg text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-900 focus:ring-cyan-500 transform hover:scale-105
-                            ${status === 'connected' ? 'bg-red-600 hover:bg-red-700 shadow-red-500/30' : 'bg-cyan-600 hover:bg-cyan-700 shadow-cyan-500/30'}
-                            ${status === 'connecting' ? 'bg-gray-500 cursor-not-allowed' : ''}
-                        `}
-                    >
-                        {getButtonContent()}
-                    </button>
+            {/* Bottom Controls Area */}
+            <div className="w-full bg-white/80 dark:bg-black/40 backdrop-blur-md pb-6 pt-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-10 border-t border-slate-200 dark:border-white/10">
+                <div className="w-full max-w-lg mx-auto flex flex-col gap-4 px-4">
+                    {errorMessage && <p className="text-red-500 dark:text-red-400 text-center">{errorMessage}</p>}
                     
-                     <button
-                        onClick={handleRestart}
-                        className="flex-shrink-0 w-14 h-14 inline-flex items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-gray-200 hover:bg-slate-300 dark:hover:bg-slate-600 shadow-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-900 focus:ring-gray-500"
-                        title="Restart Conversation"
-                    >
-                        <RefreshIcon className="w-6 h-6" />
-                    </button>
-                </div>
+                    {/* Status Indicator */}
+                    {status === 'connected' && (
+                        <p className="text-green-500 dark:text-green-400 text-sm animate-pulse text-center font-medium">
+                            {isPaused ? 'Paused' : 'Listening...'}
+                        </p>
+                    )}
 
-                <div className="flex gap-2 w-full mt-2">
-                    <input
-                        type="text"
-                        value={textInput}
-                        onChange={(e) => setTextInput(e.target.value)}
-                        onKeyDown={handleKeyPress}
-                        placeholder="Type a message..."
-                        className="flex-1 px-4 py-3 bg-white dark:bg-slate-800/50 border border-slate-300 dark:border-white/10 rounded-full focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                    />
-                    <button
-                        onClick={handleSendText}
-                        disabled={!textInput.trim()}
-                        className="p-3 bg-cyan-600 text-white rounded-full hover:bg-cyan-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors shadow-md"
-                    >
-                        <SendIcon className="w-6 h-6" />
-                    </button>
+                    {/* Chat Input */}
+                    <div className="flex gap-2 w-full">
+                        <input
+                            type="text"
+                            value={textInput}
+                            onChange={(e) => setTextInput(e.target.value)}
+                            onKeyDown={handleKeyPress}
+                            placeholder="Type a message..."
+                            className="flex-1 px-4 py-3 bg-white dark:bg-slate-800/50 border border-slate-300 dark:border-white/10 rounded-full focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                        />
+                        <button
+                            onClick={handleSendText}
+                            disabled={!textInput.trim()}
+                            className="p-3 bg-cyan-600 text-white rounded-full hover:bg-cyan-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors shadow-md"
+                        >
+                            <SendIcon className="w-6 h-6" />
+                        </button>
+                    </div>
+
+                    {/* Navigation Bar Controls */}
+                    <div className="flex items-center justify-center gap-8 mt-2">
+                         {/* Left: Pause Button */}
+                         <button
+                            onClick={handlePause}
+                            disabled={status !== 'connected'}
+                            className={`flex-shrink-0 w-14 h-14 inline-flex items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-gray-200 shadow-lg transition-all transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-900 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed ${status === 'connected' ? 'hover:scale-105 hover:bg-slate-300 dark:hover:bg-slate-600' : ''}`}
+                            title={isPaused ? "Resume" : "Pause"}
+                        >
+                            {isPaused ? <PlayIcon className="w-6 h-6" /> : <PauseIcon className="w-6 h-6" />}
+                        </button>
+
+                        {/* Center: Start/Stop Button */}
+                        <button
+                            onClick={handleToggleConversation}
+                            disabled={status === 'connecting'}
+                            className={`flex-shrink-0 w-24 h-24 inline-flex items-center justify-center rounded-full shadow-xl text-white transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-offset-4 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-900 transform hover:scale-105
+                                ${status === 'connected' ? 'bg-red-600 hover:bg-red-700 shadow-red-500/40 focus:ring-red-500' : 'bg-cyan-600 hover:bg-cyan-700 shadow-cyan-500/40 focus:ring-cyan-500'}
+                                ${status === 'connecting' ? 'bg-gray-500 cursor-not-allowed' : ''}
+                            `}
+                        >
+                             {status === 'connecting' ? (
+                                <svg className="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            ) : status === 'connected' ? (
+                                <StopIcon className="w-10 h-10" />
+                            ) : (
+                                <span className="text-xl font-bold">Start</span>
+                            )}
+                        </button>
+                        
+                         {/* Right: Restart Button */}
+                         <button
+                            onClick={handleRestart}
+                            className="flex-shrink-0 w-14 h-14 inline-flex items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-gray-200 hover:bg-slate-300 dark:hover:bg-slate-600 shadow-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-900 focus:ring-gray-500"
+                            title="Restart Conversation"
+                        >
+                            <RefreshIcon className="w-6 h-6" />
+                        </button>
+                    </div>
                 </div>
             </div>
 

@@ -74,11 +74,11 @@ const App: React.FC = () => {
   const getTitle = () => {
     switch (activeTab) {
       case 'generator':
-        return 'Podcast Generator';
+        return 'Generator';
       case 'records':
-        return 'Podcast Library';
+        return 'Library';
       case 'live':
-        return 'Live Conversation';
+        return 'Speak with AI';
       default:
         return 'Podcast Studio';
     }
@@ -117,6 +117,9 @@ const App: React.FC = () => {
     if (activeTab === 'dashboard') {
         return <Dashboard setActiveTab={setActiveTab} onOpenSettings={() => setIsSidebarOpen(true)} />;
     }
+    
+    const isLive = activeTab === 'live';
+
     return (
        <div 
         className="min-h-screen bg-slate-100 text-slate-800 dark:bg-gradient-to-br dark:from-slate-900 dark:to-gray-900 dark:text-gray-100 font-sans flex flex-col items-center transition-colors duration-300"
@@ -132,7 +135,7 @@ const App: React.FC = () => {
             >
                 <ArrowLeftIcon className="w-6 h-6" />
             </button>
-            <h1 className={`font-bold bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent ${activeTab === 'generator' ? 'text-3xl' : 'text-4xl'}`}>
+            <h1 className="font-bold bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent text-3xl">
             {getTitle()}
             </h1>
             <button
@@ -140,21 +143,18 @@ const App: React.FC = () => {
                 className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full text-slate-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/10"
                 aria-label="Open settings"
             >
-                <MenuIcon className="w-8 h-8" />
+                <MenuIcon className="w-6 h-6" />
             </button>
         </header>
         
-        <div className="w-full max-w-4xl mx-auto pt-24 px-4 sm:px-6 lg:px-8 pb-8">
-          <div className="bg-white/60 dark:bg-black/30 rounded-xl shadow-2xl backdrop-blur-xl overflow-hidden border border-slate-200 dark:border-transparent">
-            <main className="p-4 sm:p-6 lg:p-8">
+        <div className={`w-full max-w-4xl mx-auto ${isLive ? 'h-[calc(100vh-5rem)] mt-20 flex flex-col' : 'pt-24 px-4 sm:px-6 lg:px-8 pb-8'}`}>
+          <div className={`bg-white/60 dark:bg-black/30 overflow-hidden border border-slate-200 dark:border-transparent ${isLive ? 'flex-1 flex flex-col border-x-0 border-b-0 rounded-none' : 'rounded-xl shadow-2xl backdrop-blur-xl'}`}>
+            <main className={`${isLive ? 'flex-1 flex flex-col h-full overflow-hidden' : 'p-4 sm:p-6 lg:p-8'}`}>
               {activeTab === 'generator' && <PodcastGenerator isPremium={isPremium} onAudioGenerated={handleAudioGenerated} />}
               {activeTab === 'records' && <PodcastRecords records={podcastRecords} />}
               {activeTab === 'live' && <LiveConversation />}
             </main>
           </div>
-          <footer className="text-center mt-8 text-gray-500 text-sm">
-              <p>Powered by the Gemini API</p>
-          </footer>
         </div>
       </div>
     )

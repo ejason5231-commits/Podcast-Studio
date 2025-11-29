@@ -18,7 +18,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, onOpenSettings }) =
                     className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full text-slate-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white transition-all focus:outline-none"
                     aria-label="Open settings"
                 >
-                    <MenuIcon className="w-8 h-8" />
+                    <MenuIcon className="w-6 h-6" />
                 </button>
 
                 {/* Centered Brand */}
@@ -53,7 +53,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, onOpenSettings }) =
                         <div className="absolute inset-2 rounded-full bg-purple-100 dark:bg-[#0a0c17] flex items-center justify-center">
                              <button className="relative w-full h-full rounded-full flex flex-col items-center justify-center text-center text-purple-900 dark:text-white">
                                 <MicIcon className="w-12 h-12 mb-2 text-purple-700 dark:text-white drop-shadow-lg" />
-                                <span className="text-base font-bold tracking-widest leading-tight">LIVE<br/>CONVERSATION</span>
+                                <span className="text-base font-bold tracking-widest leading-tight">SPEAK<br/>WITH AI</span>
                             </button>
                         </div>
                     </div>
@@ -80,7 +80,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, onOpenSettings }) =
                         <div className="absolute inset-2 rounded-full bg-purple-100 dark:bg-[#0a0c17] flex items-center justify-center">
                             <button className="relative w-full h-full rounded-full flex flex-col items-center justify-center text-center text-purple-900 dark:text-white">
                                 <MicIcon className="w-12 h-12 mb-2 text-purple-700 dark:text-white drop-shadow-lg" />
-                                <span className="text-base font-bold tracking-widest leading-tight">LIVE<br/>CONVERSATION</span>
+                                <span className="text-base font-bold tracking-widest leading-tight">SPEAK<br/>WITH AI</span>
                             </button>
                         </div>
                     </div>
