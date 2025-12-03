@@ -1,6 +1,6 @@
 
 import { GoogleGenAI, Modality } from '@google/genai';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { createWavFile, decode, playNotificationSound } from '../utils/audioUtils';
 import { DownloadIcon, UploadIcon, PlayCircleIcon, SaveIcon } from './icons';
 
@@ -43,7 +43,18 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
     const [generationType, setGenerationType] = useState<'script' | 'audio' | null>(null);
     const [isSaved, setIsSaved] = useState(false);
 
+    // Reward Ad State
+    const [isRewardAdVisible, setIsRewardAdVisible] = useState(false);
+    const [adCountdown, setAdCountdown] = useState(0);
+    const adTimerRef = useRef<any>(null);
+
     const scriptFileInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        return () => {
+            if (adTimerRef.current) clearInterval(adTimerRef.current);
+        };
+    }, []);
 
     const handleSpeakerChange = (index: number, field: keyof Speaker, value: string) => {
         const newSpeakers = [...speakers];
@@ -175,14 +186,31 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
         }
     };
 
-    const handleConfirmGeneration = () => {
+    const handleWatchAd = () => {
         setIsModalOpen(false);
-        if (generationType === 'script') {
-            executeGenerateScript();
-        } else if (generationType === 'audio') {
-            executeGenerateAudio();
-        }
-        setGenerationType(null);
+        setIsRewardAdVisible(true);
+        setAdCountdown(15);
+        
+        if (adTimerRef.current) clearInterval(adTimerRef.current);
+        
+        adTimerRef.current = setInterval(() => {
+            setAdCountdown(prev => {
+                if (prev <= 1) {
+                    clearInterval(adTimerRef.current);
+                    setTimeout(() => {
+                        setIsRewardAdVisible(false);
+                         if (generationType === 'script') {
+                            executeGenerateScript();
+                        } else if (generationType === 'audio') {
+                            executeGenerateAudio();
+                        }
+                        setGenerationType(null);
+                    }, 500);
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
     };
 
     const handleExportScript = () => {
@@ -487,13 +515,13 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
                             <PlayCircleIcon className="w-12 h-12 text-cyan-500 dark:text-cyan-400" />
                         </div>
                         <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Watch Ads to Generate</h3>
-                        <p className="text-gray-500 dark:text-gray-400 mb-6">Confirm to proceed with generation.</p>
+                        <p className="text-gray-500 dark:text-gray-400 mb-6">Support us by watching a short ad.</p>
                         <div className="flex flex-col gap-2">
                             <button
-                                onClick={handleConfirmGeneration}
+                                onClick={handleWatchAd}
                                 className="w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-800 focus:ring-cyan-500"
                             >
-                                Generate
+                                Watch Ad to Generate
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
@@ -502,6 +530,36 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
                                 Cancel
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {isRewardAdVisible && (
+                <div className="fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center text-white">
+                    <div className="absolute top-4 right-4 bg-gray-800 px-4 py-2 rounded-full text-sm font-mono">
+                        Reward in: {adCountdown}s
+                    </div>
+                    <div className="text-center p-8 w-full max-w-md">
+                         <h2 className="text-2xl font-bold mb-2 text-cyan-400 tracking-wider uppercase">Sponsored Content</h2>
+                         <p className="text-lg mb-8 text-gray-300">Please watch this ad to generate your podcast.</p>
+                         <div className="w-full aspect-video bg-slate-800 rounded-xl flex items-center justify-center border border-slate-700 shadow-2xl relative overflow-hidden">
+                             <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 to-blue-900/40 animate-pulse"></div>
+                             <div className="relative z-10 flex flex-col items-center">
+                                <span className="text-4xl font-black text-slate-600 tracking-widest opacity-50">AD</span>
+                                <div className="mt-4 flex gap-1">
+                                    <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '0s'}}></div>
+                                    <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s'}}></div>
+                                    <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s'}}></div>
+                                </div>
+                             </div>
+                         </div>
+                         <div className="mt-8 w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                            <div 
+                                className="bg-cyan-500 h-full transition-all duration-1000 ease-linear"
+                                style={{ width: `${((15 - adCountdown) / 15) * 100}%` }}
+                            ></div>
+                         </div>
+                         <p className="mt-4 text-sm text-gray-500 animate-pulse">Generation will start automatically...</p>
                     </div>
                 </div>
             )}

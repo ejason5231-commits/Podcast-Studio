@@ -138,13 +138,15 @@ const App: React.FC = () => {
             <h1 className="font-bold bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent text-3xl">
             {getTitle()}
             </h1>
-            <button
-                onClick={() => setIsSidebarOpen(true)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full text-slate-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/10"
-                aria-label="Open settings"
-            >
-                <MenuIcon className="w-6 h-6" />
-            </button>
+            {activeTab !== 'live' && (
+                <button
+                    onClick={() => setIsSidebarOpen(true)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full text-slate-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/10"
+                    aria-label="Open settings"
+                >
+                    <MenuIcon className="w-6 h-6" />
+                </button>
+            )}
         </header>
         
         <div className={`w-full max-w-4xl mx-auto ${isLive ? 'h-[calc(100vh-5rem)] mt-20 flex flex-col' : 'pt-24 px-4 sm:px-6 lg:px-8 pb-8'}`}>
