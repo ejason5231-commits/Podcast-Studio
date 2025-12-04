@@ -54,11 +54,11 @@ const Sidebar: React.FC<SidebarProps> = ({
       
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 right-0 h-full w-72 bg-[#1565C0] text-white shadow-lg z-[70] transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 h-full w-72 bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out border-l border-slate-200 dark:border-slate-800 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
-        <div className="flex justify-between items-center p-4 border-b border-white/20">
+        <div className="flex justify-between items-center p-4 border-b border-slate-200 dark:border-slate-800">
           <h2 className="text-xl font-bold">Settings</h2>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10">
+          <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors">
             <CloseIcon className="w-6 h-6" />
           </button>
         </div>
@@ -68,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({
            <div className="pb-4">
             <button 
                 onClick={() => setIsLoginModalOpen(true)} 
-                className="w-full flex items-center justify-center space-x-2 bg-[#1565C0] hover:bg-[#1565C0]/90 text-white font-bold py-3 px-4 rounded-xl shadow-[0_4px_0_#0D47A1] active:shadow-none active:translate-y-[4px] transition-all"
+                className="w-full flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-[0_4px_0_rgb(30,58,138)] active:shadow-none active:translate-y-[4px] transition-all"
             >
               <ProfileIcon className="w-6 h-6 text-white" />
               <span>Login</span>
@@ -77,14 +77,14 @@ const Sidebar: React.FC<SidebarProps> = ({
 
 
           {/* Notifications */}
-          <div className="flex items-center justify-between p-2 rounded-md hover:bg-white/10 transition-colors">
-            <div className="flex items-center space-x-3">
-              <BellIcon className="w-6 h-6 text-white" />
+          <div className="flex items-center justify-between p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <div className="flex items-center space-x-3 text-slate-700 dark:text-slate-200">
+              <BellIcon className="w-6 h-6 text-slate-500 dark:text-slate-400" />
               <span>Notifications</span>
             </div>
             <button
               onClick={() => setNotificationsEnabled(!notificationsEnabled)}
-              className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors ${notificationsEnabled ? 'bg-[#1565C0] border border-white' : 'bg-black/20'}`}
+              className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors ${notificationsEnabled ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-700'}`}
             >
               <span
                 className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${notificationsEnabled ? 'translate-x-6' : 'translate-x-1'}`}
@@ -93,18 +93,18 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Theme */}
-          <div className="flex items-center justify-between p-2 rounded-md hover:bg-white/10 transition-colors">
-            <div className="flex items-center space-x-3">
+          <div className="flex items-center justify-between p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <div className="flex items-center space-x-3 text-slate-700 dark:text-slate-200">
               {theme === 'dark' ? (
-                <MoonIcon className="w-6 h-6 text-white" />
+                <MoonIcon className="w-6 h-6 text-slate-500 dark:text-slate-400" />
               ) : (
-                <SunIcon className="w-6 h-6 text-white" />
+                <SunIcon className="w-6 h-6 text-slate-500 dark:text-slate-400" />
               )}
               <span>Theme</span>
             </div>
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors ${theme === 'dark' ? 'bg-[#1565C0] border border-white' : 'bg-black/20'}`}
+              className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors ${theme === 'dark' ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-700'}`}
             >
               <span
                 className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${theme === 'dark' ? 'translate-x-6' : 'translate-x-1'}`}
@@ -113,20 +113,20 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Microphone */}
-          <div className="p-2 rounded-md hover:bg-white/10 transition-colors">
+          <div className="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
             <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                    <MicIcon className="w-6 h-6 text-white" />
+                <div className="flex items-center space-x-3 text-slate-700 dark:text-slate-200">
+                    <MicIcon className="w-6 h-6 text-slate-500 dark:text-slate-400" />
                     <span>Microphone</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-blue-100 uppercase">
+                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">
                         {micPermission === 'granted' ? 'On' : micPermission === 'denied' ? 'Off' : 'Turn On'}
                     </span>
                     <button
                         onClick={requestMicPermission}
                         disabled={micPermission === 'granted'}
-                        className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors disabled:cursor-not-allowed ${micPermission === 'granted' ? 'bg-[#1565C0] border border-white' : 'bg-black/20'}`}
+                        className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors disabled:cursor-not-allowed ${micPermission === 'granted' ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-700'}`}
                     >
                         <span
                             className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${micPermission === 'granted' ? 'translate-x-6' : 'translate-x-1'}`}
@@ -135,7 +135,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </div>
             </div>
             {micPermission === 'denied' && (
-                <p className="text-xs text-blue-200 mt-2 pl-9">
+                <p className="text-xs text-red-500 dark:text-red-400 mt-2 pl-9">
                    Permission denied. Tap "Turn On" to try again.
                 </p>
             )}
@@ -143,38 +143,38 @@ const Sidebar: React.FC<SidebarProps> = ({
           
           {/* Buy Premium */}
            {isPremium ? (
-             <div className="p-2 rounded-md bg-green-500/20">
-                <div className="flex items-center space-x-3 text-green-300">
+             <div className="p-2 rounded-md bg-green-100 dark:bg-green-900/20">
+                <div className="flex items-center space-x-3 text-green-700 dark:text-green-400">
                 <PremiumIcon className="w-6 h-6" />
                 <span>Premium Active</span>
                 </div>
             </div>
           ) : (
-            <button onClick={handleBuyPremium} className="w-full text-left p-2 rounded-md hover:bg-white/10 transition-colors">
-                <div className="flex items-center space-x-3">
-                <PremiumIcon className="w-6 h-6 text-white" />
+            <button onClick={handleBuyPremium} className="w-full text-left p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <div className="flex items-center space-x-3 text-slate-700 dark:text-slate-200">
+                <PremiumIcon className="w-6 h-6 text-slate-500 dark:text-slate-400" />
                 <span>Buy Premium</span>
                 </div>
             </button>
           )}
         </nav>
-        <div className="absolute bottom-0 left-0 w-full p-4 border-t border-white/20">
+        <div className="absolute bottom-0 left-0 w-full p-4 border-t border-slate-200 dark:border-slate-800">
             <div className="text-center mb-2">
-                <h4 className="text-xs font-semibold text-blue-200 uppercase tracking-wider">Follow on</h4>
+                <h4 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Follow on</h4>
             </div>
             <div className="flex justify-center space-x-4 mb-3">
-                <a href="https://www.youtube.com/@LearnEngwithEric" target="_blank" rel="noopener noreferrer" aria-label="YouTube Channel" className="p-2 rounded-full bg-white text-[#1565C0] hover:bg-blue-50 transition-colors">
-                    <YouTubeIcon className="w-7 h-7" />
+                <a href="https://www.youtube.com/@LearnEngwithEric" target="_blank" rel="noopener noreferrer" aria-label="YouTube Channel" className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors">
+                    <YouTubeIcon className="w-6 h-6" />
                 </a>
-                <a href="https://www.facebook.com/LearnEngwithEric" target="_blank" rel="noopener noreferrer" aria-label="Facebook Page" className="p-2 rounded-full bg-white text-[#1565C0] hover:bg-blue-50 transition-colors">
-                    <FacebookIcon className="w-7 h-7" />
+                <a href="https://www.facebook.com/LearnEngwithEric" target="_blank" rel="noopener noreferrer" aria-label="Facebook Page" className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors">
+                    <FacebookIcon className="w-6 h-6" />
                 </a>
-                <a href="https://t.me/LearnEnglishwithEric" target="_blank" rel="noopener noreferrer" aria-label="Telegram Channel" className="p-2 rounded-full bg-white text-[#1565C0] hover:bg-blue-50 transition-colors">
-                    <TelegramIcon className="w-7 h-7" />
+                <a href="https://t.me/LearnEnglishwithEric" target="_blank" rel="noopener noreferrer" aria-label="Telegram Channel" className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors">
+                    <TelegramIcon className="w-6 h-6" />
                 </a>
             </div>
              <div className="text-center">
-                <p className="text-sm text-blue-100 font-medium">
+                <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
                     Podcast Studio by English with Eric
                 </p>
             </div>
@@ -241,7 +241,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                     setIsLoginModalOpen(false);
                                     setIsPremiumModalOpen(true);
                                 }}
-                                className="w-full py-3.5 rounded-xl border-2 border-dashed border-purple-300 dark:border-purple-600 text-[#1565C0] dark:text-[#42a5f5] font-bold hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-400 transition-all text-sm"
+                                className="w-full py-3.5 rounded-xl border-2 border-dashed border-purple-300 dark:border-purple-600 text-blue-600 dark:text-blue-400 font-bold hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-400 transition-all text-sm"
                             >
                                 ✨ Get Premium to Login
                             </button>
@@ -274,7 +274,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <button
                         onClick={handleConfirmPurchase}
                         disabled={true}
-                        className="w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-[#1565C0] hover:bg-[#1565C0]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-800 focus:ring-[#1565C0] disabled:bg-gray-500 disabled:cursor-not-allowed"
+                        className="w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-800 focus:ring-blue-500 disabled:bg-gray-500 disabled:cursor-not-allowed"
                     >
                         {isProcessing ? (
                             <><svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Processing...</>
