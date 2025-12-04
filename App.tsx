@@ -36,12 +36,15 @@ const App: React.FC = () => {
   }, [theme]);
 
   useEffect(() => {
-    if (navigator.permissions) {
+    if (navigator.permissions && navigator.permissions.query) {
       navigator.permissions.query({ name: 'microphone' as PermissionName }).then((permissionStatus) => {
         setMicPermission(permissionStatus.state);
         permissionStatus.onchange = () => {
           setMicPermission(permissionStatus.state);
         };
+      }).catch(err => {
+        // Fallback or ignore if query is not supported
+        console.log("Permission query not supported", err);
       });
     }
   }, []);
@@ -55,12 +58,19 @@ const App: React.FC = () => {
 
   const requestMicPermission = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Robust constraints for better compatibility with MIUI/Redmi
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true,
+        }
+      });
       stream.getTracks().forEach(track => track.stop());
-      // The state will be updated automatically by the 'onchange' listener
+      setMicPermission('granted'); 
     } catch (err) {
       console.error('Microphone permission denied', err);
-      setMicPermission('denied'); // Manually update state on error
+      setMicPermission('denied');
     }
   };
 

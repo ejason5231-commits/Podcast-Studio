@@ -39,18 +39,9 @@ const LiveConversation: React.FC = () => {
     const adTimerRef = useRef<any>(null);
     const adCountdownTimerRef = useRef<any>(null);
 
-    const clearAdTimers = useCallback(() => {
-        if (adTimerRef.current) {
-            clearInterval(adTimerRef.current);
-            adTimerRef.current = null;
-        }
-        if (adCountdownTimerRef.current) {
-            clearInterval(adCountdownTimerRef.current);
-            adCountdownTimerRef.current = null;
-        }
-    }, []);
-
     const showAd = useCallback(() => {
+        // PLACEHOLDER: Logic to show real ad would go here.
+        // For example: adUnit.show()
         setIsAdVisible(true);
         setAdCountdown(5);
         if (adCountdownTimerRef.current) clearInterval(adCountdownTimerRef.current);
@@ -67,6 +58,7 @@ const LiveConversation: React.FC = () => {
     }, []);
 
     const handleCloseAd = () => {
+        // PLACEHOLDER: Logic after ad is closed
         setIsAdVisible(false);
         if (adCountdownTimerRef.current) {
             clearInterval(adCountdownTimerRef.current);
@@ -79,8 +71,8 @@ const LiveConversation: React.FC = () => {
         pendingMessagesRef.current = [];
         setIsPaused(false);
 
-        clearAdTimers();
-        setIsAdVisible(false);
+        // Note: We intentionally do NOT clear ad timers or visibility here.
+        // Ads are tied to "Staying in speak with AI screen", not the session connection.
 
         if (sessionPromiseRef.current) {
             try {
@@ -118,13 +110,21 @@ const LiveConversation: React.FC = () => {
             await outputAudioContextRef.current.close();
             outputAudioContextRef.current = null;
         }
-    }, [clearAdTimers]);
+    }, []);
     
+    // Lifecycle Effect: Manages Ad Timer and Cleanup
     useEffect(() => {
+        // Start ad timer on mount (every 60 seconds of staying on screen)
+        // This corresponds to: "in every one minute of Staying in speak with AI screen"
+        adTimerRef.current = setInterval(showAd, 60000); 
+
         return () => {
+            // Cleanup on unmount
+            if (adTimerRef.current) clearInterval(adTimerRef.current);
+            if (adCountdownTimerRef.current) clearInterval(adCountdownTimerRef.current);
             stopConversation();
         };
-    }, [stopConversation]);
+    }, [showAd, stopConversation]);
 
     // Auto-scroll to bottom of transcripts
     useEffect(() => {
@@ -145,7 +145,14 @@ const LiveConversation: React.FC = () => {
         }
 
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            // Robust constraints for mobile devices
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    autoGainControl: true,
+                }
+            });
             mediaStreamRef.current = stream;
 
             inputAudioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
@@ -192,10 +199,6 @@ const LiveConversation: React.FC = () => {
                         mediaStreamSourceRef.current.connect(scriptProcessorRef.current);
                         scriptProcessorRef.current.connect(inputAudioContextRef.current.destination);
                         setStatus('connected');
-
-                        // Start ad timer
-                        clearAdTimers();
-                        adTimerRef.current = setInterval(showAd, 60000); // 60 seconds
 
                         pendingMessagesRef.current = [];
                     },
@@ -417,8 +420,19 @@ const LiveConversation: React.FC = () => {
 
             {isAdVisible && (
                 <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-[100] backdrop-blur-sm rounded-xl">
+                    {/* Placeholder for Real Ad Unit */}
+                    {/* To replace with real AdMob/AdSense:
+                        1. Insert the ad container div here.
+                        2. Initialize the ad in the `showAd` function or a useEffect.
+                        3. Handle the close event provided by the SDK to call `handleCloseAd`.
+                        
+                        Example:
+                        <div id="ad-container" className="..."/>
+                    */}
+                    
                     <div className="bg-slate-800 p-6 rounded-lg shadow-xl text-white text-center w-full max-w-sm m-4">
                         <h3 className="text-xl font-bold mb-4">Advertisement</h3>
+                        {/* Placeholder Content */}
                         <p className="text-gray-300 mb-6">This ad supports the app. Thank you!</p>
                         <div className="w-full bg-slate-700 rounded-full h-2.5 mb-4 overflow-hidden">
                             <div className="bg-cyan-500 h-2.5 rounded-full transition-all duration-1000 ease-linear" style={{ width: `${(5 - adCountdown) / 5 * 100}%` }}></div>
@@ -430,6 +444,7 @@ const LiveConversation: React.FC = () => {
                         >
                             {adCountdown > 0 ? `Close in ${adCountdown}` : 'Close Ad'}
                         </button>
+                        {/* End Placeholder Content */}
                     </div>
                 </div>
             )}

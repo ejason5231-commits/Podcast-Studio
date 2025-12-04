@@ -54,11 +54,11 @@ const Sidebar: React.FC<SidebarProps> = ({
       
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 right-0 h-full w-72 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg text-slate-700 dark:text-gray-200 shadow-lg z-[70] transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 h-full w-72 bg-[#1565C0] text-white shadow-lg z-[70] transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
-        <div className="flex justify-between items-center p-4 border-b border-slate-200 dark:border-white/10">
+        <div className="flex justify-between items-center p-4 border-b border-white/20">
           <h2 className="text-xl font-bold">Settings</h2>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10">
+          <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10">
             <CloseIcon className="w-6 h-6" />
           </button>
         </div>
@@ -77,14 +77,14 @@ const Sidebar: React.FC<SidebarProps> = ({
 
 
           {/* Notifications */}
-          <div className="flex items-center justify-between p-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+          <div className="flex items-center justify-between p-2 rounded-md hover:bg-white/10 transition-colors">
             <div className="flex items-center space-x-3">
-              <BellIcon className="w-6 h-6 text-[#1565C0] dark:text-[#42a5f5]" />
+              <BellIcon className="w-6 h-6 text-white" />
               <span>Notifications</span>
             </div>
             <button
               onClick={() => setNotificationsEnabled(!notificationsEnabled)}
-              className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors ${notificationsEnabled ? 'bg-[#1565C0]' : 'bg-gray-300 dark:bg-gray-600'}`}
+              className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors ${notificationsEnabled ? 'bg-[#1565C0] border border-white' : 'bg-black/20'}`}
             >
               <span
                 className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${notificationsEnabled ? 'translate-x-6' : 'translate-x-1'}`}
@@ -93,18 +93,18 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Theme */}
-          <div className="flex items-center justify-between p-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+          <div className="flex items-center justify-between p-2 rounded-md hover:bg-white/10 transition-colors">
             <div className="flex items-center space-x-3">
               {theme === 'dark' ? (
-                <MoonIcon className="w-6 h-6 text-[#1565C0] dark:text-[#42a5f5]" />
+                <MoonIcon className="w-6 h-6 text-white" />
               ) : (
-                <SunIcon className="w-6 h-6 text-[#1565C0] dark:text-[#42a5f5]" />
+                <SunIcon className="w-6 h-6 text-white" />
               )}
               <span>Theme</span>
             </div>
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors ${theme === 'dark' ? 'bg-[#1565C0]' : 'bg-gray-300 dark:bg-gray-600'}`}
+              className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors ${theme === 'dark' ? 'bg-[#1565C0] border border-white' : 'bg-black/20'}`}
             >
               <span
                 className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${theme === 'dark' ? 'translate-x-6' : 'translate-x-1'}`}
@@ -113,25 +113,30 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Microphone */}
-          <div className="p-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+          <div className="p-2 rounded-md hover:bg-white/10 transition-colors">
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                    <MicIcon className="w-6 h-6 text-[#1565C0] dark:text-[#42a5f5]" />
+                    <MicIcon className="w-6 h-6 text-white" />
                     <span>Microphone</span>
                 </div>
-                <button
-                    onClick={requestMicPermission}
-                    disabled={micPermission !== 'prompt'}
-                    className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors disabled:cursor-not-allowed ${micPermission === 'granted' ? 'bg-[#1565C0]' : 'bg-gray-300 dark:bg-gray-600'}`}
-                >
-                    <span
-                        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${micPermission === 'granted' ? 'translate-x-6' : 'translate-x-1'}`}
-                    />
-                </button>
+                <div className="flex items-center gap-2">
+                    <span className="text-xs font-medium text-blue-100 uppercase">
+                        {micPermission === 'granted' ? 'On' : micPermission === 'denied' ? 'Off' : 'Turn On'}
+                    </span>
+                    <button
+                        onClick={requestMicPermission}
+                        disabled={micPermission === 'granted'}
+                        className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors disabled:cursor-not-allowed ${micPermission === 'granted' ? 'bg-[#1565C0] border border-white' : 'bg-black/20'}`}
+                    >
+                        <span
+                            className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${micPermission === 'granted' ? 'translate-x-6' : 'translate-x-1'}`}
+                        />
+                    </button>
+                </div>
             </div>
             {micPermission === 'denied' && (
-                <p className="text-xs text-red-500 dark:text-red-400 mt-2 pl-9">
-                    Access is denied. Please enable it in your browser settings.
+                <p className="text-xs text-blue-200 mt-2 pl-9">
+                   Permission denied. Tap "Turn On" to try again.
                 </p>
             )}
           </div>
@@ -139,37 +144,37 @@ const Sidebar: React.FC<SidebarProps> = ({
           {/* Buy Premium */}
            {isPremium ? (
              <div className="p-2 rounded-md bg-green-500/20">
-                <div className="flex items-center space-x-3 text-green-600 dark:text-green-300">
+                <div className="flex items-center space-x-3 text-green-300">
                 <PremiumIcon className="w-6 h-6" />
                 <span>Premium Active</span>
                 </div>
             </div>
           ) : (
-            <button onClick={handleBuyPremium} className="w-full text-left p-2 rounded-md hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+            <button onClick={handleBuyPremium} className="w-full text-left p-2 rounded-md hover:bg-white/10 transition-colors">
                 <div className="flex items-center space-x-3">
-                <PremiumIcon className="w-6 h-6 text-[#1565C0] dark:text-[#42a5f5]" />
+                <PremiumIcon className="w-6 h-6 text-white" />
                 <span>Buy Premium</span>
                 </div>
             </button>
           )}
         </nav>
-        <div className="absolute bottom-0 left-0 w-full p-4 border-t border-slate-200 dark:border-white/10">
+        <div className="absolute bottom-0 left-0 w-full p-4 border-t border-white/20">
             <div className="text-center mb-2">
-                <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Follow on</h4>
+                <h4 className="text-xs font-semibold text-blue-200 uppercase tracking-wider">Follow on</h4>
             </div>
             <div className="flex justify-center space-x-4 mb-3">
-                <a href="https://www.youtube.com/@LearnEngwithEric" target="_blank" rel="noopener noreferrer" aria-label="YouTube Channel" className="p-2 rounded-full bg-red-600 text-white hover:bg-red-700 transition-colors">
+                <a href="https://www.youtube.com/@LearnEngwithEric" target="_blank" rel="noopener noreferrer" aria-label="YouTube Channel" className="p-2 rounded-full bg-white text-[#1565C0] hover:bg-blue-50 transition-colors">
                     <YouTubeIcon className="w-7 h-7" />
                 </a>
-                <a href="https://www.facebook.com/LearnEngwithEric" target="_blank" rel="noopener noreferrer" aria-label="Facebook Page" className="p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+                <a href="https://www.facebook.com/LearnEngwithEric" target="_blank" rel="noopener noreferrer" aria-label="Facebook Page" className="p-2 rounded-full bg-white text-[#1565C0] hover:bg-blue-50 transition-colors">
                     <FacebookIcon className="w-7 h-7" />
                 </a>
-                <a href="https://t.me/LearnEnglishwithEric" target="_blank" rel="noopener noreferrer" aria-label="Telegram Channel" className="p-2 rounded-full bg-sky-500 text-white hover:bg-sky-600 transition-colors">
+                <a href="https://t.me/LearnEnglishwithEric" target="_blank" rel="noopener noreferrer" aria-label="Telegram Channel" className="p-2 rounded-full bg-white text-[#1565C0] hover:bg-blue-50 transition-colors">
                     <TelegramIcon className="w-7 h-7" />
                 </a>
             </div>
              <div className="text-center">
-                <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
+                <p className="text-sm text-blue-100 font-medium">
                     Podcast Studio by English with Eric
                 </p>
             </div>
@@ -236,7 +241,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                     setIsLoginModalOpen(false);
                                     setIsPremiumModalOpen(true);
                                 }}
-                                className="w-full py-3.5 rounded-xl border-2 border-dashed border-purple-300 dark:border-purple-600 text-purple-600 dark:text-purple-400 font-bold hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-400 transition-all text-sm"
+                                className="w-full py-3.5 rounded-xl border-2 border-dashed border-purple-300 dark:border-purple-600 text-[#1565C0] dark:text-[#42a5f5] font-bold hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-400 transition-all text-sm"
                             >
                                 ✨ Get Premium to Login
                             </button>
