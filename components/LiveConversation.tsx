@@ -1,5 +1,5 @@
 
-import { GoogleGenAI, LiveSession, LiveServerMessage, Modality } from '@google/genai';
+import { GoogleGenAI, LiveServerMessage, Modality } from '@google/genai';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { decode, decodeAudioData, encode } from '../utils/audioUtils';
 import { MicIcon, UserIcon, BotIcon, StopIcon, SendIcon, RefreshIcon, PauseIcon, PlayIcon } from './icons';
@@ -21,7 +21,7 @@ const LiveConversation: React.FC = () => {
     const [isAdVisible, setIsAdVisible] = useState(false);
     const [adCountdown, setAdCountdown] = useState(5);
 
-    const sessionPromiseRef = useRef<Promise<LiveSession> | null>(null);
+    const sessionPromiseRef = useRef<Promise<any> | null>(null);
     const inputAudioContextRef = useRef<AudioContext | null>(null);
     const outputAudioContextRef = useRef<AudioContext | null>(null);
     const scriptProcessorRef = useRef<ScriptProcessorNode | null>(null);

@@ -11,8 +11,18 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, onOpenSettings }) =
     return (
         <div className="min-h-screen w-full flex flex-col items-center bg-slate-50 dark:bg-gradient-to-b dark:from-[#0a0c17] dark:to-black text-slate-900 dark:text-white font-sans relative overflow-hidden transition-colors duration-300">
             {/* Header / Taskbar - Fixed at top */}
-            <header className="fixed top-0 left-0 right-0 h-20 flex items-center justify-between bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-300 dark:border-white/10 shadow-sm dark:shadow-none z-50 px-4">
-                {/* Settings Button - Right Top Corner */}
+            <header className="fixed top-0 left-0 right-0 h-16 flex items-center bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-300 dark:border-white/10 shadow-sm dark:shadow-none z-50 px-4">
+                
+                {/* Centered Brand */}
+                <div className="flex items-center justify-center w-full select-none pointer-events-none gap-2">
+                    <RadarWaveIcon className="w-10 h-10" />
+                    <div className="text-left flex flex-col items-start justify-center animate-pulse">
+                        <h1 className="text-2xl font-bold tracking-[0.2em] font-display text-slate-900 dark:text-white leading-none">PODCAST</h1>
+                        <h2 className="text-sm font-bold tracking-[0.15em] font-display text-slate-500 dark:text-gray-400 leading-none mt-0.5">STUDIO</h2>
+                    </div>
+                </div>
+
+                {/* Settings Button - Right Top Corner (Absolute) */}
                 <button 
                     onClick={onOpenSettings}
                     className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full text-slate-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white transition-all focus:outline-none"
@@ -20,19 +30,10 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, onOpenSettings }) =
                 >
                     <MenuIcon className="w-6 h-6" />
                 </button>
-
-                {/* Centered Brand */}
-                <div className="flex items-center justify-center w-full select-none pointer-events-none gap-3">
-                    <RadarWaveIcon className="w-12 h-12" />
-                    <div className="text-center flex flex-col items-start justify-center animate-pulse">
-                        <h1 className="text-3xl font-bold tracking-[0.2em] font-display text-slate-900 dark:text-white leading-none">PODCAST</h1>
-                        <h2 className="text-xl font-bold tracking-[0.15em] font-display text-slate-500 dark:text-gray-400 leading-none mt-1">STUDIO</h2>
-                    </div>
-                </div>
             </header>
 
             {/* Main content centered with padding for fixed header */}
-            <main className="flex-1 flex flex-col items-center justify-center w-full px-4 py-8 pt-24">
+            <main className="flex-1 flex flex-col items-center justify-center w-full px-4 py-8 pt-20">
                 {/* Landscape Layout (wider screens) */}
                 <div className="hidden sm:flex flex-row items-center justify-center gap-6">
                      {/* Generate Button */}
@@ -93,7 +94,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, onOpenSettings }) =
                                 onClick={() => setActiveTab('generator')} 
                                 className="w-full h-24 bg-indigo-100 dark:bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center text-indigo-900 dark:text-white overflow-hidden group"
                             >
-                                <AiSwirlIcon className="w-7 h-7 mb-1 text-indigo-700 dark:text-white group-hover:scale-110 transition-transform" />
+                                <AiSwirlIcon className="w-8 h-8 mb-1 text-indigo-700 dark:text-white group-hover:scale-110 transition-transform" />
                                 <span className="text-sm font-semibold tracking-wider">GENERATE<br/>PODCAST</span>
                             </button>
                         </div>
@@ -103,7 +104,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, onOpenSettings }) =
                                 onClick={() => setActiveTab('records')} 
                                 className="w-full h-24 bg-rose-100 dark:bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center text-rose-900 dark:text-white overflow-hidden group"
                             >
-                                <LibraryBooksIcon className="w-7 h-7 mb-1 text-rose-700 dark:text-white group-hover:scale-110 transition-transform" />
+                                <LibraryBooksIcon className="w-8 h-8 mb-1 text-rose-700 dark:text-white group-hover:scale-110 transition-transform" />
                                 <span className="text-sm font-semibold tracking-wider">PODCAST<br/>LIBRARY</span>
                             </button>
                         </div>
