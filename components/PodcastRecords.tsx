@@ -114,14 +114,15 @@ const PodcastRecords: React.FC<PodcastRecordsProps> = ({ records }) => {
                  <h2 className="text-2xl font-bold bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent inline-block">
                     Youtube Podcast
                 </h2>
-                <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                {/* Lateral Scrollable Thumbnails */}
+                <div className="flex flex-row gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scroll-smooth custom-scrollbar">
                      {youtubePodcasts.map((podcast) => (
                         <a 
                             key={podcast.id} 
                             href={podcast.link} 
                             target="_blank" 
                             rel="noopener noreferrer" 
-                            className="block bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-md border border-slate-200 dark:border-white/10 group hover:border-red-500/50 hover:shadow-xl transition-all duration-300"
+                            className="min-w-[280px] w-[280px] flex-none snap-center block bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-md border border-slate-200 dark:border-white/10 group hover:border-red-500/50 hover:shadow-xl transition-all duration-300"
                         >
                             <div className={`aspect-video ${podcast.thumbnailClass} relative flex items-center justify-center overflow-hidden`}>
                                 <YouTubeIcon className={`w-14 h-14 ${podcast.iconColor} z-10 drop-shadow-lg transform group-hover:scale-110 transition-transform duration-300`} />
