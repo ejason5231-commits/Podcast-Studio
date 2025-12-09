@@ -39,8 +39,6 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
     const [isLoadingAudio, setIsLoadingAudio] = useState(false);
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [generationType, setGenerationType] = useState<'script' | 'audio' | null>(null);
     const [isSaved, setIsSaved] = useState(false);
 
     const scriptFileInputRef = useRef<HTMLInputElement>(null);
@@ -97,13 +95,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
     };
     
     const handleGenerateScript = () => {
-        if (isPremium) {
-            executeGenerateScript();
-        } else {
-            playNotificationSound();
-            setGenerationType('script');
-            setIsModalOpen(true);
-        }
+        executeGenerateScript();
     };
 
     const executeGenerateAudio = async () => {
@@ -166,24 +158,7 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
             setError("Please generate or import a script first.");
             return;
         }
-        if (isPremium) {
-            executeGenerateAudio();
-        } else {
-            playNotificationSound();
-            setGenerationType('audio');
-            setIsModalOpen(true);
-        }
-    };
-
-    const handleWatchAd = () => {
-        setIsModalOpen(false);
-        // Direct execution - ads removed
-         if (generationType === 'script') {
-            executeGenerateScript();
-        } else if (generationType === 'audio') {
-            executeGenerateAudio();
-        }
-        setGenerationType(null);
+        executeGenerateAudio();
     };
 
     const handleExportScript = () => {
@@ -481,31 +456,6 @@ const PodcastGenerator: React.FC<PodcastGeneratorProps> = ({ isPremium, onAudioG
                     )}
                 </div>
             </div>
-             {isModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 backdrop-blur-sm">
-                    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-6 w-full max-w-sm text-center border border-slate-200 dark:border-slate-700">
-                        <div className="flex justify-center mb-4">
-                            <PlayCircleIcon className="w-12 h-12 text-cyan-500 dark:text-cyan-400" />
-                        </div>
-                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Generate Content</h3>
-                        <p className="text-gray-500 dark:text-gray-400 mb-6">Generate content using the free version?</p>
-                        <div className="flex flex-col gap-2">
-                            <button
-                                onClick={handleWatchAd}
-                                className="w-full flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-800 focus:ring-cyan-500"
-                            >
-                                Generate
-                            </button>
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="w-full flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md text-gray-600 dark:text-gray-300 bg-slate-200 dark:bg-transparent hover:bg-slate-300 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-800 focus:ring-gray-500 dark:focus:ring-gray-600"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
