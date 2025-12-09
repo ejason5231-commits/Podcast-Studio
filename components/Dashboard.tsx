@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MicIcon, AiSwirlIcon, LibraryBooksIcon, RadarWaveIcon, MenuIcon } from './icons';
 
@@ -37,7 +36,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, onOpenSettings }) =
                 {/* Landscape Layout (wider screens) */}
                 <div className="hidden sm:flex flex-row items-center justify-center gap-6">
                      {/* Generate Button */}
-                    <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-blue-500/80 via-purple-500/80 to-transparent shadow-lg dark:shadow-none transition-transform hover:scale-105">
+                    <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-blue-500/80 via-purple-500/80 to-transparent shadow-lg dark:shadow-none transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(99,102,241,0.6)]">
                         <button 
                             onClick={() => setActiveTab('generator')} 
                             className="w-48 h-24 bg-indigo-100 dark:bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center text-indigo-900 dark:text-white overflow-hidden group"
@@ -60,7 +59,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, onOpenSettings }) =
                     </div>
 
                      {/* Library Button */}
-                     <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-red-500/80 via-purple-500/80 to-transparent shadow-lg dark:shadow-none transition-transform hover:scale-105">
+                     <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-red-500/80 via-purple-500/80 to-transparent shadow-lg dark:shadow-none transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(244,63,94,0.6)]">
                         <button 
                             onClick={() => setActiveTab('records')} 
                             className="w-48 h-24 bg-rose-100 dark:bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center text-rose-900 dark:text-white overflow-hidden group"
@@ -89,7 +88,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, onOpenSettings }) =
                     {/* Lower Section */}
                     <div className="w-full max-w-md flex items-center justify-center gap-4 z-10">
                         {/* Generate Button */}
-                        <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-blue-500/80 via-purple-500/80 to-transparent w-40 shadow-lg dark:shadow-none transition-transform hover:scale-105">
+                        <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-blue-500/80 via-purple-500/80 to-transparent w-40 shadow-lg dark:shadow-none transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(99,102,241,0.6)]">
                             <button 
                                 onClick={() => setActiveTab('generator')} 
                                 className="w-full h-24 bg-indigo-100 dark:bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center text-indigo-900 dark:text-white overflow-hidden group"
@@ -99,7 +98,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveTab, onOpenSettings }) =
                             </button>
                         </div>
                         {/* Library Button */}
-                        <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-red-500/80 via-purple-500/80 to-transparent w-40 shadow-lg dark:shadow-none transition-transform hover:scale-105">
+                        <div className="relative p-[1px] rounded-2xl bg-gradient-to-b from-red-500/80 via-purple-500/80 to-transparent w-40 shadow-lg dark:shadow-none transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(244,63,94,0.6)]">
                             <button 
                                 onClick={() => setActiveTab('records')} 
                                 className="w-full h-24 bg-rose-100 dark:bg-slate-900/80 rounded-[15px] flex flex-col items-center justify-center backdrop-blur-sm text-center text-rose-900 dark:text-white overflow-hidden group"
